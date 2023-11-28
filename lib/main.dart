@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.bitter().fontFamily,
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.lime,
+          seedColor: Colors.brown,
           brightness: Brightness.light,
         ),
       ),

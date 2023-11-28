@@ -25,21 +25,40 @@ class _NoteWidgetState extends State<NoteWidget> {
         ),
         child: Row(
           children: [
-            Checkbox(
-              value: isChecked,
-              onChanged: (value) {
-                setState(() {
-                  isChecked = value!;
-                });
-              },
+            Flexible(
+              flex: 1,
+              child: Checkbox(
+                value: isChecked,
+                onChanged: (value) {
+                  setState(() {
+                    isChecked = value!;
+                  });
+                },
+              ),
             ),
-            Text("some todo task".hardcoded),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(right: Sizes.p12),
-              child: Icon(
-                Icons.delete,
-                color: Theme.of(context).colorScheme.primary,
+            Expanded(
+              flex: 6,
+              child: Padding(
+                padding:
+                    const EdgeInsets.fromLTRB(0, Sizes.p8, Sizes.p4, Sizes.p8),
+                child: Text(
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                      .hardcoded,
+                  softWrap: true,
+                  style: isChecked
+                      ? const TextStyle(decoration: TextDecoration.lineThrough)
+                      : const TextStyle(decoration: TextDecoration.none),
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(right: Sizes.p12),
+                child: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             )
           ],
