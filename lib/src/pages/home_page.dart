@@ -17,11 +17,25 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Text(
           "TO DO".hardcoded,
-          style: Theme.of(context).textTheme.titleLarge,
         ),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: const NoteWidget(),
+      body: ListView(
+        children: const [
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+          NoteWidget(),
+        ],
+      ),
     );
   }
 }

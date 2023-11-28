@@ -13,6 +13,17 @@ class Sizes {
   static const p64 = 64.0;
 }
 
+/// Constant radius widths
+const radius4 = Radius.circular(4);
+const radius8 = Radius.circular(8);
+const radius12 = Radius.circular(12);
+const radius16 = Radius.circular(16);
+const radius20 = Radius.circular(20);
+const radius24 = Radius.circular(24);
+const radius32 = Radius.circular(32);
+const radius48 = Radius.circular(48);
+const radius64 = Radius.circular(64);
+
 /// Constant gap widths
 const gapW4 = SizedBox(width: Sizes.p4);
 const gapW8 = SizedBox(width: Sizes.p8);

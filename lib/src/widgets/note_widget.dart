@@ -13,27 +13,36 @@ class _NoteWidgetState extends State<NoteWidget> {
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(
-            Sizes.p24, Sizes.p12, Sizes.p24, Sizes.p12),
-        child: ColoredBox(
+    return Padding(
+      padding:
+          const EdgeInsets.fromLTRB(Sizes.p24, Sizes.p12, Sizes.p24, Sizes.p12),
+      child: Container(
+        decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
-          child: Row(
-            children: [
-              Checkbox(
-                value: isChecked,
-                onChanged: (value) {
-                  setState(() {
-                    isChecked = value!;
-                  });
-                },
-              ),
-              Text("some todo task".hardcoded),
-              const Spacer(),
-              const Icon(Icons.delete)
-            ],
+          borderRadius: const BorderRadius.all(
+            radius12,
           ),
+        ),
+        child: Row(
+          children: [
+            Checkbox(
+              value: isChecked,
+              onChanged: (value) {
+                setState(() {
+                  isChecked = value!;
+                });
+              },
+            ),
+            Text("some todo task".hardcoded),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: Sizes.p12),
+              child: Icon(
+                Icons.delete,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            )
+          ],
         ),
       ),
     );
