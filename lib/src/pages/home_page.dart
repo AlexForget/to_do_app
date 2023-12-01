@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  final _controller = TextEditingController();
+  TextEditingController _controller = TextEditingController();
 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
@@ -53,9 +53,47 @@ class _HomePageState extends State<HomePage> {
           controller: _controller,
           onSave: safeNewTask,
           onCancel: () => Navigator.pop(context),
+          title: "Nouvelle note".hardcoded,
+          hint: "Ajouter une nouvelle note".hardcoded,
         );
       },
     );
+  }
+
+  void editTask(int index) {
+    _controller = getTaskText(index);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogBoxWidget(
+          controller: _controller,
+          onSave: () => {
+            updateEditTask(index),
+            Navigator.pop(context),
+          },
+          onCancel: () => {
+            _controller.text = "",
+            Navigator.pop(context),
+          },
+          title: "Modifier note".hardcoded,
+          hint: "Modifier la note".hardcoded,
+        );
+      },
+    );
+  }
+
+  TextEditingController getTaskText(int index) {
+    TextEditingController temp = TextEditingController();
+    temp.text = db.toDoList.elementAt(index)[0];
+    return temp;
+  }
+
+  void updateEditTask(int index) {
+    setState(() {
+      db.toDoList[index] = [_controller.text, false];
+      _controller.text = "";
+      db.updateDataBase();
+    });
   }
 
   void deleteTask(int index) {
@@ -93,6 +131,7 @@ class _HomePageState extends State<HomePage> {
             taskCompleted: db.toDoList[index][1],
             onChanged: (value) => checkBoxChanged(value, index),
             deleteNote: () => deleteTask(index),
+            editNote: () => editTask(index),
           );
         },
       ),

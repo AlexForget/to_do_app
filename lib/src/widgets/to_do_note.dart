@@ -6,6 +6,7 @@ class ToDoNoteWidget extends StatelessWidget {
   final bool taskCompleted;
   final Function(bool?) onChanged;
   final void Function() deleteNote;
+  final void Function() editNote;
 
   const ToDoNoteWidget({
     super.key,
@@ -13,6 +14,7 @@ class ToDoNoteWidget extends StatelessWidget {
     required this.taskCompleted,
     required this.onChanged,
     required this.deleteNote,
+    required this.editNote,
   });
 
   @override
@@ -50,12 +52,23 @@ class ToDoNoteWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(right: Sizes.p12),
                 child: IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: editNote,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(right: Sizes.p12),
+                child: IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: deleteNote,
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
