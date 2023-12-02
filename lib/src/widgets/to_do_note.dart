@@ -28,16 +28,13 @@ class ToDoNoteWidget extends StatelessWidget {
             borderRadius: const BorderRadius.all(radius12),
             color: Theme.of(context).colorScheme.primaryContainer),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(
-              flex: 1,
-              child: Checkbox(
-                value: taskCompleted,
-                onChanged: onChanged,
-              ),
+            Checkbox(
+              value: taskCompleted,
+              onChanged: onChanged,
             ),
             Expanded(
-              flex: 6,
               child: Text(
                 taskName,
                 style: TextStyle(
@@ -47,27 +44,19 @@ class ToDoNoteWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Flexible(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.only(right: Sizes.p12),
-                child: IconButton(
+            Row(
+              children: [
+                IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: editNote,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.only(right: Sizes.p12),
-                child: IconButton(
+                IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: deleteNote,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-              ),
+              ],
             ),
           ],
         ),

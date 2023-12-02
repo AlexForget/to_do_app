@@ -82,12 +82,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  TextEditingController getTaskText(int index) {
-    TextEditingController temp = TextEditingController();
-    temp.text = db.toDoList.elementAt(index)[0];
-    return temp;
-  }
-
   void updateEditTask(int index) {
     setState(() {
       db.toDoList[index] = [_controller.text, false];
@@ -101,6 +95,12 @@ class _HomePageState extends State<HomePage> {
       db.toDoList.removeAt(index);
       db.updateDataBase();
     });
+  }
+
+  TextEditingController getTaskText(int index) {
+    TextEditingController temp = TextEditingController();
+    temp.text = db.toDoList.elementAt(index)[0];
+    return temp;
   }
 
   @override
