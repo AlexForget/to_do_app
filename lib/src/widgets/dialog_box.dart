@@ -3,38 +3,43 @@ import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 import 'package:to_do_app/src/widgets/my_button.dart';
 
 class DialogBoxWidget extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final String? message;
   final VoidCallback onSave;
   final VoidCallback onCancel;
   final String title;
-  final String hint;
+  final String? hint;
 
   const DialogBoxWidget({
     super.key,
-    required this.controller,
+    this.controller,
+    this.message,
     required this.onSave,
     required this.onCancel,
     required this.title,
-    required this.hint,
+    this.hint,
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(title),
-      content: TextField(
-        controller: controller,
-        decoration: InputDecoration(hintText: hint),
-        minLines: 1,
-        maxLines: 5,
-      ),
+      content: message == null
+          ? TextField(
+              controller: controller,
+              decoration: InputDecoration(hintText: hint),
+              minLines: 1,
+              maxLines: 5,
+            )
+          : Text(message!),
       actions: <Widget>[
         MyButtonWidget(
           buttonLabel: "Annuler".hardcoded,
           onPressed: onCancel,
         ),
         MyButtonWidget(
-          buttonLabel: "Enregistrer".hardcoded,
+          buttonLabel:
+              message == null ? "Enregistrer".hardcoded : "Supprimer".hardcoded,
           onPressed: onSave,
         ),
       ],

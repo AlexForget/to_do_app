@@ -90,6 +90,23 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void confirmDeleteTask(index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogBoxWidget(
+          onSave: () => {
+            deleteTask(index),
+            Navigator.pop(context),
+          },
+          onCancel: () => Navigator.pop(context),
+          title: "Supprimer la note".hardcoded,
+          message: "Confirmer la suppresion de la note".hardcoded,
+        );
+      },
+    );
+  }
+
   void deleteTask(int index) {
     setState(() {
       db.toDoList.removeAt(index);
@@ -130,7 +147,7 @@ class _HomePageState extends State<HomePage> {
             taskName: db.toDoList[index][0],
             taskCompleted: db.toDoList[index][1],
             onChanged: (value) => checkBoxChanged(value, index),
-            deleteNote: () => deleteTask(index),
+            deleteNote: () => confirmDeleteTask(index),
             editNote: () => editTask(index),
           );
         },
