@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:to_do_app/src/constants/app_sizes.dart';
 import 'package:to_do_app/src/data/database.dart';
 import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 import 'package:to_do_app/src/widgets/dialog_box.dart';
@@ -141,6 +142,7 @@ class _HomePageState extends State<HomePage> {
         shadowColor: Theme.of(context).colorScheme.onBackground,
       ),
       body: ListView.builder(
+        padding: const EdgeInsets.only(bottom: Sizes.p64),
         itemCount: db.toDoList.length,
         itemBuilder: (context, index) {
           return ToDoNoteWidget(
