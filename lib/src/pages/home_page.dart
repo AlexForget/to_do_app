@@ -55,7 +55,10 @@ class _HomePageState extends State<HomePage> {
         return DialogBoxWidget(
           controller: _controller,
           onSave: safeNewTask,
-          onCancel: () => Navigator.pop(context),
+          onCancel: () => {
+            Navigator.pop(context),
+            _controller.text = "",
+          },
           title: "Nouvelle note".hardcoded,
           hint: "Ajouter une nouvelle note".hardcoded,
         );
