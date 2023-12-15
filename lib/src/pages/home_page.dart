@@ -38,12 +38,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   void safeNewTask() {
-    setState(() {
-      db.toDoList.add([_controller.text, false]);
-      _controller.text = "";
-      db.updateDataBase();
-      Navigator.pop(context);
-    });
+    if (_controller.text.isNotEmpty) {
+      setState(() {
+        db.toDoList.add([_controller.text, false]);
+        _controller.text = "";
+        db.updateDataBase();
+      });
+    }
+    Navigator.pop(context);
   }
 
   void createNewTask() {
