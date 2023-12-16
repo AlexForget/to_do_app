@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 import 'package:to_do_app/src/widgets/my_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

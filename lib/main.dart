@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:to_do_app/src/localisation/string_hardcoded.dart';
+import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:to_do_app/src/pages/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,7 +10,7 @@ void main() async {
   // ignore: await_only_futures
   await Hive.initFlutter();
   // ignore: unused_local_variable
-  var box = await Hive.openBox('mybox');
+  var box = await Hive.openBox(MY_HIVE_BOX_NAME);
   runApp(const MyApp());
 }
 

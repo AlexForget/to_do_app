@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:to_do_app/src/constants/app_sizes.dart';
+import 'package:to_do_app/src/helpers/app_sizes.dart';
 import 'package:to_do_app/src/data/database.dart';
-import 'package:to_do_app/src/localisation/string_hardcoded.dart';
+import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:to_do_app/src/widgets/dialog_box.dart';
 import 'package:to_do_app/src/widgets/to_do_note.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,14 +15,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _myBox = Hive.box("mybox");
+  final _myBox = Hive.box(MY_HIVE_BOX_NAME);
   ToDoDataBase db = ToDoDataBase();
 
   @override
   void initState() {
     // if ever first time, create default data
-    if (_myBox.get("TODOLIST") == null) {
-      db.createInitialData();
+    if (_myBox.get(TODO_LIST_NAME) == null) {
+      db.createInitialData(AppLocalizations.of(context)!.defaultNote);
     } else {
       db.loadData();
     }

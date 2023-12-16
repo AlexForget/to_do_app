@@ -1,22 +1,22 @@
 import 'package:hive/hive.dart';
-import 'package:to_do_app/src/localisation/string_hardcoded.dart';
+import 'package:to_do_app/src/helpers/constants.dart';
 
 class ToDoDataBase {
   List toDoList = [];
 
-  final _myBox = Hive.box("mybox");
+  final _myBox = Hive.box(MY_HIVE_BOX_NAME);
 
-  void createInitialData() {
+  void createInitialData(String note) {
     toDoList = [
-      ["Default Note".hardcoded, false]
+      [note, false]
     ];
   }
 
   void loadData() {
-    toDoList = _myBox.get("TODOLIST");
+    toDoList = _myBox.get(TODO_LIST_NAME);
   }
 
   void updateDataBase() {
-    _myBox.put("TODOLIST", toDoList);
+    _myBox.put(TODO_LIST_NAME, toDoList);
   }
 }
