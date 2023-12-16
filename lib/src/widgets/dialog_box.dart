@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 import 'package:to_do_app/src/widgets/my_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DialogBoxWidget extends StatelessWidget {
   final TextEditingController? controller;
@@ -26,6 +27,7 @@ class DialogBoxWidget extends StatelessWidget {
       title: Text(title),
       content: message == null
           ? TextField(
+              textCapitalization: TextCapitalization.sentences,
               controller: controller,
               decoration: InputDecoration(hintText: hint),
               minLines: 1,
@@ -34,12 +36,13 @@ class DialogBoxWidget extends StatelessWidget {
           : Text(message!),
       actions: <Widget>[
         MyButtonWidget(
-          buttonLabel: "Annuler".hardcoded,
+          buttonLabel: AppLocalizations.of(context)!.cancel,
           onPressed: onCancel,
         ),
         MyButtonWidget(
-          buttonLabel:
-              message == null ? "Enregistrer".hardcoded : "Supprimer".hardcoded,
+          buttonLabel: message == null
+              ? AppLocalizations.of(context)!.record
+              : AppLocalizations.of(context)!.delete,
           onPressed: onSave,
         ),
       ],

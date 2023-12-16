@@ -5,6 +5,7 @@ import 'package:to_do_app/src/data/database.dart';
 import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 import 'package:to_do_app/src/widgets/dialog_box.dart';
 import 'package:to_do_app/src/widgets/to_do_note.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -59,8 +60,8 @@ class _HomePageState extends State<HomePage> {
             Navigator.pop(context),
             _controller.text = "",
           },
-          title: "Nouvelle note".hardcoded,
-          hint: "Ajouter une nouvelle note".hardcoded,
+          title: AppLocalizations.of(context)!.newNote,
+          hint: AppLocalizations.of(context)!.addNewNote,
         );
       },
     );
@@ -81,8 +82,7 @@ class _HomePageState extends State<HomePage> {
             _controller.text = "",
             Navigator.pop(context),
           },
-          title: "Modifier note".hardcoded,
-          hint: "Modifier la note".hardcoded,
+          title: AppLocalizations.of(context)!.modifyNote,
         );
       },
     );
@@ -106,8 +106,8 @@ class _HomePageState extends State<HomePage> {
             Navigator.pop(context),
           },
           onCancel: () => Navigator.pop(context),
-          title: "Supprimer la note".hardcoded,
-          message: "Confirmer la suppresion de la note".hardcoded,
+          title: AppLocalizations.of(context)!.deleteNote,
+          message: AppLocalizations.of(context)!.confirmDeleteNote,
         );
       },
     );
@@ -133,14 +133,14 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         foregroundColor: Theme.of(context).colorScheme.surface,
         backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-        label: Text("Ajouter".hardcoded),
+        label: Text(AppLocalizations.of(context)!.add),
         icon: const Icon(Icons.add),
         onPressed: createNewTask,
       ),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "TO DO".hardcoded,
+          AppLocalizations.of(context)!.title,
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 4.0,

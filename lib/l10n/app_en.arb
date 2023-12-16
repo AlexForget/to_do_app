@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+  "title": "To Do",
+  "@title": {
+    "description": "the title of the application"
+  },
+  "defaultNote": "Default note",
+  "@defaultNote": {
+    "description": "A default note for the first time the app is run"
+  },
+  "add": "Add",
+  "newNote": "New note",
+  "addNewNote": "Add a new note",
+  "modifyNote": "Modify note",
+  "deleteNote": "Delete note",
+  "confirmDeleteNote": "Confirm note delete",
+  "cancel": "Cancel",
+  "record": "Save",
+  "delete": "Delete"
+}

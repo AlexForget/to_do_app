@@ -1,0 +1,14 @@
+{
+    "@@locale": "fr",
+    "title": "À faire",
+    "defaultNote": "Note par défaut",
+    "add": "Ajouter",
+    "newNote": "nouvelle note",
+    "addNewNote": "Ajouter une nouvelle note",
+    "modifyNote": "Modifier la note",
+    "deleteNote": "Supprimer la note",
+    "confirmDeleteNote": "Confirmer la suppresion de la note",
+    "cancel": "Annuler",
+    "record": "Enregistrer",
+    "delete": "Supprimer"
+}
