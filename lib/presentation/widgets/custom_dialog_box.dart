@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/src/widgets/my_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:to_do_app/presentation/widgets/add_note_button.dart';
 
-class DialogBoxWidget extends StatelessWidget {
+class CustomDialogBox extends StatelessWidget {
   final TextEditingController? controller;
   final String? message;
   final VoidCallback onSave;
@@ -10,7 +10,7 @@ class DialogBoxWidget extends StatelessWidget {
   final String title;
   final String? hint;
 
-  const DialogBoxWidget({
+  const CustomDialogBox({
     super.key,
     this.controller,
     this.message,
@@ -34,11 +34,11 @@ class DialogBoxWidget extends StatelessWidget {
             )
           : Text(message!),
       actions: <Widget>[
-        MyButtonWidget(
+        AddNoteButton(
           buttonLabel: AppLocalizations.of(context)!.cancel,
           onPressed: onCancel,
         ),
-        MyButtonWidget(
+        AddNoteButton(
           buttonLabel: message == null
               ? AppLocalizations.of(context)!.record
               : AppLocalizations.of(context)!.delete,

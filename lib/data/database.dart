@@ -1,10 +1,10 @@
 import 'package:hive/hive.dart';
-import 'package:to_do_app/src/helpers/constants.dart';
+import 'package:to_do_app/helpers/constants.dart';
 
 class ToDoDataBase {
   List toDoList = [];
 
-  final _myBox = Hive.box(MY_HIVE_BOX_NAME);
+  final _myBox = Hive.box(myHiveBoxName);
 
   void createInitialData(String note) {
     toDoList = [
@@ -13,10 +13,10 @@ class ToDoDataBase {
   }
 
   void loadData() {
-    toDoList = _myBox.get(TODO_LIST_NAME);
+    toDoList = _myBox.get(toDoListName);
   }
 
   void updateDataBase() {
-    _myBox.put(TODO_LIST_NAME, toDoList);
+    _myBox.put(toDoListName, toDoList);
   }
 }

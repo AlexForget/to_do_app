@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MyButtonWidget extends StatelessWidget {
-  const MyButtonWidget(
+class AddNoteButton extends StatelessWidget {
+  const AddNoteButton(
       {super.key, required this.buttonLabel, required this.onPressed});
 
   final String buttonLabel;

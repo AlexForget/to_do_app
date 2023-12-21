@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:to_do_app/src/helpers/app_sizes.dart';
-import 'package:to_do_app/src/data/database.dart';
-import 'package:to_do_app/src/helpers/constants.dart';
-import 'package:to_do_app/src/widgets/dialog_box.dart';
-import 'package:to_do_app/src/widgets/to_do_note.dart';
+import 'package:to_do_app/helpers/app_sizes.dart';
+import 'package:to_do_app/data/database.dart';
+import 'package:to_do_app/helpers/constants.dart';
+import 'package:to_do_app/presentation/widgets/custom_dialog_box.dart';
+import 'package:to_do_app/presentation/widgets/to_do_note.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,13 +15,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _myBox = Hive.box(MY_HIVE_BOX_NAME);
+  final _myBox = Hive.box(myHiveBoxName);
   ToDoDataBase db = ToDoDataBase();
 
   @override
   void initState() {
     // if ever first time, create default data
-    if (_myBox.get(TODO_LIST_NAME) == null) {
+    if (_myBox.get(toDoListName) == null) {
       db.createInitialData(AppLocalizations.of(context)!.defaultNote);
     } else {
       db.loadData();
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) {
-        return DialogBoxWidget(
+        return CustomDialogBox(
           controller: _controller,
           onSave: safeNewTask,
           onCancel: () => {
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) {
-        return DialogBoxWidget(
+        return CustomDialogBox(
           controller: _controller,
           onSave: () => {
             updateEditTask(index),
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) {
-        return DialogBoxWidget(
+        return CustomDialogBox(
           onSave: () => {
             deleteTask(index),
             Navigator.pop(context),
