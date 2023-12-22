@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:to_do_app/helpers/app_sizes.dart';
-import 'package:to_do_app/data/database.dart';
-import 'package:to_do_app/helpers/constants.dart';
-import 'package:to_do_app/presentation/widgets/custom_dialog_box.dart';
-import 'package:to_do_app/presentation/widgets/to_do_note.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:to_do_app/src/features/notes/data/database.dart';
+import 'package:to_do_app/src/helpers/app_sizes.dart';
+import 'package:to_do_app/src/helpers/constants.dart';
+import 'package:to_do_app/src/common_widgets/custom_dialog_box.dart';
+import 'package:to_do_app/src/common_widgets/to_do_note.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

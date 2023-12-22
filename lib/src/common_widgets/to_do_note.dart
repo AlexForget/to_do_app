@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/helpers/app_sizes.dart';
+import 'package:to_do_app/src/helpers/app_sizes.dart';
 
 class ToDoNote extends StatelessWidget {
   final String taskName;

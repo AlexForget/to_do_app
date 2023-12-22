@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:to_do_app/helpers/constants.dart';
+import 'package:to_do_app/src/helpers/constants.dart';
 
 class ToDoDataBase {
   List toDoList = [];
