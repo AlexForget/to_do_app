@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
 
@@ -6,8 +7,13 @@ part 'note_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
   NoteBloc() : super(NoteInitial()) {
-    on<NoteEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<AddNote>(_addNote);
+  }
+
+  void _addNote(
+    AddNote event,
+    Emitter<NoteState> emit,
+  ) {
+    emit(NoteInitial());
   }
 }

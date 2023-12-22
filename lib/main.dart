@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:to_do_app/data/bloc/note_bloc.dart';
 import 'package:to_do_app/presentation/screens/home_page.dart';
 import 'package:to_do_app/helpers/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,20 +25,23 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return MaterialApp(
-      onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: GoogleFonts.bitter().fontFamily,
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.purple,
-          brightness: Brightness.light,
+    return BlocProvider(
+      create: (context) => NoteBloc(),
+      child: MaterialApp(
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: GoogleFonts.bitter().fontFamily,
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.purple,
+            brightness: Brightness.light,
+          ),
         ),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const HomePage(),
       ),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const HomePage(),
     );
   }
 }
