@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.only(bottom: Sizes.p64),
         itemCount: db.toDoList.length,
         itemBuilder: (context, index) {
-          return ToDoNoteWidget(
+          return ToDoNote(
             taskName: db.toDoList[index][0],
             taskCompleted: db.toDoList[index][1],
             onChanged: (value) => checkBoxChanged(value, index),

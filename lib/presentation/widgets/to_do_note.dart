@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/helpers/app_sizes.dart';
 
-class ToDoNoteWidget extends StatelessWidget {
+class ToDoNote extends StatelessWidget {
   final String taskName;
   final bool taskCompleted;
   final Function(bool?) onChanged;
   final void Function() deleteNote;
   final void Function() editNote;
 
-  const ToDoNoteWidget({
+  const ToDoNote({
     super.key,
     required this.taskName,
     required this.taskCompleted,
