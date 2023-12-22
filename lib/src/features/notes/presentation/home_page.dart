@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:to_do_app/src/features/notes/data/database.dart';
+import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
-import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:to_do_app/src/common_widgets/custom_dialog_box.dart';
 import 'package:to_do_app/src/common_widgets/to_do_note.dart';
 
@@ -15,38 +14,46 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _myBox = Hive.box(myHiveBoxName);
-  ToDoDataBase db = ToDoDataBase();
-
   @override
   void initState() {
-    // if ever first time, create default data
-    if (_myBox.get(toDoListName) == null) {
-      db.createInitialData(AppLocalizations.of(context)!.defaultNote);
-    } else {
-      db.loadData();
-    }
     super.initState();
   }
 
   TextEditingController _controller = TextEditingController();
 
-  void checkBoxChanged(bool? value, int index) {
+  void checkBoxChanged(bool value, int index) {
     setState(() {
-      db.toDoList[index][1] = !db.toDoList[index][1];
-      db.updateDataBase();
+      NoteModel note = boxNotes.getAt(index);
+      note.completed = value;
+      boxNotes.putAt(index, note);
     });
   }
 
   void safeNewTask() {
     if (_controller.text.isNotEmpty) {
       setState(() {
-        db.toDoList.add([_controller.text, false]);
+        int noteId = retreiveNextFreeId();
+        boxNotes.put(
+            'key_$noteId',
+            NoteModel(
+                id: noteId,
+                description: _controller.text.trim(),
+                completed: false));
         _controller.text = "";
-        db.updateDataBase();
       });
     }
     Navigator.pop(context);
+  }
+
+  int retreiveNextFreeId() {
+    List<NoteModel> noteModels = [];
+    for (var note in boxNotes.values) {
+      noteModels.add(note);
+    }
+    if (noteModels.isEmpty) return 1;
+    List<int> ids = noteModels.map((note) => note.id).toList();
+    ids.sort();
+    return ++ids.last;
   }
 
   void createNewTask() {
@@ -90,9 +97,10 @@ class _HomePageState extends State<HomePage> {
 
   void updateEditTask(int index) {
     setState(() {
-      db.toDoList[index] = [_controller.text, false];
+      NoteModel note = boxNotes.getAt(index);
+      note.description = _controller.text;
+      boxNotes.putAt(index, note);
       _controller.text = "";
-      db.updateDataBase();
     });
   }
 
@@ -115,14 +123,14 @@ class _HomePageState extends State<HomePage> {
 
   void deleteTask(int index) {
     setState(() {
-      db.toDoList.removeAt(index);
-      db.updateDataBase();
+      boxNotes.deleteAt(index);
     });
   }
 
   TextEditingController getTaskText(int index) {
     TextEditingController temp = TextEditingController();
-    temp.text = db.toDoList.elementAt(index)[0];
+    NoteModel note = boxNotes.getAt(index);
+    temp.text = note.description;
     return temp;
   }
 
@@ -148,12 +156,13 @@ class _HomePageState extends State<HomePage> {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: Sizes.p64),
-        itemCount: db.toDoList.length,
+        itemCount: boxNotes.length,
         itemBuilder: (context, index) {
+          NoteModel noteModel = boxNotes.getAt(index);
           return ToDoNote(
-            taskName: db.toDoList[index][0],
-            taskCompleted: db.toDoList[index][1],
-            onChanged: (value) => checkBoxChanged(value, index),
+            taskName: noteModel.description,
+            taskCompleted: noteModel.completed,
+            onChanged: (value) => checkBoxChanged(value!, index),
             deleteNote: () => confirmDeleteTask(index),
             editNote: () => editTask(index),
           );

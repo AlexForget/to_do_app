@@ -1,10 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+
+part 'note_model.g.dart';
+
+@HiveType(typeId: 0)
 class NoteModel {
+  @HiveField(0)
   final int id;
-  final String description;
-  final bool completed;
+
+  @HiveField(1)
+  String description;
+
+  @HiveField(2)
+  bool completed;
+
+  @HiveField(3)
   final DateTime? notification;
 
   NoteModel({

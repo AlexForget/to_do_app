@@ -4,15 +4,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:to_do_app/src/data/bloc/note_bloc.dart';
+import 'package:to_do_app/src/features/notes/bloc/note_bloc.dart';
+import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:to_do_app/src/features/notes/presentation/home_page.dart';
 
 void main() async {
   // ignore: await_only_futures
   await Hive.initFlutter();
+  Hive.registerAdapter(NoteModelAdapter());
   // ignore: unused_local_variable
-  var box = await Hive.openBox(myHiveBoxName);
+  boxNotes = await Hive.openBox(noteHiveBox);
   runApp(const MyApp());
 }
 
