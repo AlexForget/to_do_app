@@ -7,8 +7,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
+import 'package:to_do_app/src/helpers/bloc_obesrver.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
-import 'package:to_do_app/src/features/notes/presentation/home_page.dart';
+import 'package:to_do_app/src/features/notes/presentation/screen/home_page.dart';
 
 void main() async {
   // ignore: await_only_futures
@@ -16,6 +17,7 @@ void main() async {
   Hive.registerAdapter(NoteModelAdapter());
   // ignore: unused_local_variable
   boxNotes = await Hive.openBox(noteHiveBox);
+  Bloc.observer = const SimpleBlocObserver();
   runApp(const MyApp());
 }
 
@@ -30,20 +32,23 @@ class MyApp extends StatelessWidget {
     ]);
     return BlocProvider(
       create: (context) => NoteBloc(),
-      child: MaterialApp(
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: GoogleFonts.bitter().fontFamily,
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.purple,
-            brightness: Brightness.light,
+      child: BlocProvider(
+        create: (context) => NoteBloc(),
+        child: MaterialApp(
+          onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            fontFamily: GoogleFonts.bitter().fontFamily,
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue,
+              brightness: Brightness.light,
+            ),
           ),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const HomePage(),
         ),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: const HomePage(),
       ),
     );
   }

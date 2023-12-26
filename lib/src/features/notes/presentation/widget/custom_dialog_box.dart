@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:to_do_app/src/common_widgets/add_note_button.dart';
+import 'package:to_do_app/src/features/notes/presentation/widget/add_note_button.dart';
 
 class CustomDialogBox extends StatelessWidget {
   final TextEditingController? controller;

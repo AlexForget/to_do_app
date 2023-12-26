@@ -8,7 +8,7 @@ part 'note_model.g.dart';
 @HiveType(typeId: 0)
 class NoteModel {
   @HiveField(0)
-  final int id;
+  int? id;
 
   @HiveField(1)
   String description;
@@ -20,7 +20,7 @@ class NoteModel {
   final DateTime? notification;
 
   NoteModel({
-    required this.id,
+    this.id,
     required this.description,
     required this.completed,
     this.notification,

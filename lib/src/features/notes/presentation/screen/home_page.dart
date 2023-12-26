@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:to_do_app/src/features/notes/bloc/note_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
+import 'package:to_do_app/src/features/notes/presentation/widget/note_dialogbox.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
-import 'package:to_do_app/src/common_widgets/custom_dialog_box.dart';
-import 'package:to_do_app/src/common_widgets/to_do_note.dart';
+import 'package:to_do_app/src/features/notes/presentation/widget/custom_dialog_box.dart';
+import 'package:to_do_app/src/features/notes/presentation/widget/to_do_note.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,51 +30,6 @@ class _HomePageState extends State<HomePage> {
       note.completed = value;
       boxNotes.putAt(index, note);
     });
-  }
-
-  void safeNewTask() {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        int noteId = retreiveNextFreeId();
-        boxNotes.put(
-            'key_$noteId',
-            NoteModel(
-                id: noteId,
-                description: _controller.text.trim(),
-                completed: false));
-        _controller.text = "";
-      });
-    }
-    Navigator.pop(context);
-  }
-
-  int retreiveNextFreeId() {
-    List<NoteModel> noteModels = [];
-    for (var note in boxNotes.values) {
-      noteModels.add(note);
-    }
-    if (noteModels.isEmpty) return 1;
-    List<int> ids = noteModels.map((note) => note.id).toList();
-    ids.sort();
-    return ++ids.last;
-  }
-
-  void createNewTask() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CustomDialogBox(
-          controller: _controller,
-          onSave: safeNewTask,
-          onCancel: () => {
-            Navigator.pop(context),
-            _controller.text = "",
-          },
-          title: AppLocalizations.of(context)!.newNote,
-          hint: AppLocalizations.of(context)!.addNewNote,
-        );
-      },
-    );
   }
 
   void editTask(int index) {
@@ -143,7 +101,17 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         label: Text(AppLocalizations.of(context)!.add),
         icon: const Icon(Icons.add),
-        onPressed: createNewTask,
+        onPressed: () => {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return NoteDialogBox(
+                title: AppLocalizations.of(context)!.newNote,
+                hint: AppLocalizations.of(context)!.addNewNote,
+              );
+            },
+          )
+        },
       ),
       appBar: AppBar(
         centerTitle: true,
@@ -154,19 +122,30 @@ class _HomePageState extends State<HomePage> {
         elevation: 4.0,
         shadowColor: Theme.of(context).colorScheme.onBackground,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.only(bottom: Sizes.p64),
-        itemCount: boxNotes.length,
-        itemBuilder: (context, index) {
-          NoteModel noteModel = boxNotes.getAt(index);
-          return ToDoNote(
-            taskName: noteModel.description,
-            taskCompleted: noteModel.completed,
-            onChanged: (value) => checkBoxChanged(value!, index),
-            deleteNote: () => confirmDeleteTask(index),
-            editNote: () => editTask(index),
-          );
-        },
+      body: Padding(
+        padding: const EdgeInsets.only(top: Sizes.p12),
+        child: BlocBuilder<NoteBloc, NoteState>(
+          builder: (context, state) {
+            return ListView.builder(
+              padding: const EdgeInsets.only(bottom: Sizes.p64),
+              itemCount: boxNotes.length,
+              itemBuilder: (context, index) {
+                NoteModel noteModel = boxNotes.getAt(index);
+                return BlocBuilder<NoteBloc, NoteState>(
+                  builder: (context, state) {
+                    return ToDoNote(
+                      taskName: noteModel.description,
+                      taskCompleted: noteModel.completed,
+                      onChanged: (value) => checkBoxChanged(value!, index),
+                      deleteNote: () => confirmDeleteTask(index),
+                      editNote: () => editTask(index),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

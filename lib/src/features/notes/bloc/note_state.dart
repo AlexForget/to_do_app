@@ -5,6 +5,8 @@ sealed class NoteState {}
 
 final class NoteInitial extends NoteState {}
 
+final class NoteAdded extends NoteState {}
+
 final class NoteLoading extends NoteState {}
 
 final class NoteLoaded extends NoteState {}
