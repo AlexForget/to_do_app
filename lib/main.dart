@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:to_do_app/src/features/notes/bloc/note_bloc.dart';
+import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
 import 'package:to_do_app/src/helpers/bloc_obesrver.dart';
@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return BlocProvider(
-      create: (context) => NoteBloc(),
-      child: BlocProvider(
-        create: (context) => NoteBloc(),
+      create: (context) => NoteListBloc(),
+      child: MultiBlocProvider(
+        providers: [BlocProvider(create: (contect) => NoteListBloc())],
         child: MaterialApp(
           onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
           debugShowCheckedModeBanner: false,

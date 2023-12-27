@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:to_do_app/src/features/notes/bloc/note_bloc.dart';
+import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
-import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
-import 'package:to_do_app/src/features/notes/presentation/widget/note_dialogbox.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
-import 'package:to_do_app/src/features/notes/presentation/widget/custom_dialog_box.dart';
-import 'package:to_do_app/src/features/notes/presentation/widget/to_do_note.dart';
+import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,75 +19,103 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  TextEditingController _controller = TextEditingController();
-
-  void checkBoxChanged(bool value, int index) {
-    setState(() {
-      NoteModel note = boxNotes.getAt(index);
-      note.completed = value;
-      boxNotes.putAt(index, note);
-    });
-  }
-
-  void editTask(int index) {
-    _controller = getTaskText(index);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CustomDialogBox(
-          controller: _controller,
-          onSave: () => {
-            updateEditTask(index),
-            Navigator.pop(context),
-          },
-          onCancel: () => {
-            _controller.text = "",
-            Navigator.pop(context),
-          },
-          title: AppLocalizations.of(context)!.modifyNote,
-        );
-      },
+  Widget buildNoteTile(BuildContext context, NoteModel note) {
+    return Padding(
+      padding: const EdgeInsets.only(
+          left: Sizes.p24, right: Sizes.p24, top: Sizes.p12, bottom: Sizes.p12),
+      child: Container(
+        padding: const EdgeInsets.all(Sizes.p8),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(radius12),
+            color: Theme.of(context).colorScheme.primaryContainer),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Checkbox(
+              value: note.completed,
+              onChanged: (value) => value = false, // TODO : UPDATE
+            ),
+            Expanded(
+              child: Text(
+                note.description,
+                style: TextStyle(
+                  decoration: note.completed
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {}, // TODO : UPDATE
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Theme.of(context).colorScheme.primary,
+                  onPressed: () {
+                    context.read<NoteListBloc>().add(
+                          DeleteNote(note: note),
+                        );
+                  }, // TODO : UPDATE
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  void updateEditTask(int index) {
-    setState(() {
-      NoteModel note = boxNotes.getAt(index);
-      note.description = _controller.text;
-      boxNotes.putAt(index, note);
-      _controller.text = "";
-    });
-  }
-
-  void confirmDeleteTask(index) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CustomDialogBox(
-          onSave: () => {
-            deleteTask(index),
-            Navigator.pop(context),
-          },
-          onCancel: () => Navigator.pop(context),
-          title: AppLocalizations.of(context)!.deleteNote,
-          message: AppLocalizations.of(context)!.confirmDeleteNote,
-        );
-      },
-    );
-  }
-
-  void deleteTask(int index) {
-    setState(() {
-      boxNotes.deleteAt(index);
-    });
-  }
-
-  TextEditingController getTaskText(int index) {
-    TextEditingController temp = TextEditingController();
-    NoteModel note = boxNotes.getAt(index);
-    temp.text = note.description;
-    return temp;
-  }
+  void showCustomDialog({
+    required BuildContext context,
+    bool isEdit = false,
+    required int id,
+  }) =>
+      showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController descriptionController = TextEditingController();
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context)!.record),
+            content: TextField(
+              textCapitalization: TextCapitalization.sentences,
+              controller: descriptionController,
+              decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.addNewNote),
+              minLines: 1,
+              maxLines: 5,
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<NoteListBloc>().add(
+                        AddNote(
+                          note: NoteModel(
+                              description: descriptionController.text.trim(),
+                              completed: false,
+                              id: id),
+                        ),
+                      );
+                  Navigator.pop(context);
+                  descriptionController.text = '';
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.record,
+                ),
+              ),
+            ],
+          );
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -101,16 +126,10 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         label: Text(AppLocalizations.of(context)!.add),
         icon: const Icon(Icons.add),
-        onPressed: () => {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return NoteDialogBox(
-                title: AppLocalizations.of(context)!.newNote,
-                hint: AppLocalizations.of(context)!.addNewNote,
-              );
-            },
-          )
+        onPressed: () {
+          final state = context.read<NoteListBloc>().state;
+          final id = state.notes.length;
+          showCustomDialog(context: context, id: id);
         },
       ),
       appBar: AppBar(
@@ -122,30 +141,24 @@ class _HomePageState extends State<HomePage> {
         elevation: 4.0,
         shadowColor: Theme.of(context).colorScheme.onBackground,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: Sizes.p12),
-        child: BlocBuilder<NoteBloc, NoteState>(
-          builder: (context, state) {
+      body: BlocBuilder<NoteListBloc, NoteListState>(
+        builder: (context, state) {
+          if (state is NoteListUpdated && state.notes.isNotEmpty) {
+            final notes = state.notes;
             return ListView.builder(
-              padding: const EdgeInsets.only(bottom: Sizes.p64),
-              itemCount: boxNotes.length,
+              itemCount: notes.length,
               itemBuilder: (context, index) {
-                NoteModel noteModel = boxNotes.getAt(index);
-                return BlocBuilder<NoteBloc, NoteState>(
-                  builder: (context, state) {
-                    return ToDoNote(
-                      taskName: noteModel.description,
-                      taskCompleted: noteModel.completed,
-                      onChanged: (value) => checkBoxChanged(value!, index),
-                      deleteNote: () => confirmDeleteTask(index),
-                      editNote: () => editTask(index),
-                    );
-                  },
-                );
+                final note = notes[index];
+                return buildNoteTile(context, note);
               },
             );
-          },
-        ),
+          } else {
+            return SizedBox(
+              width: double.infinity,
+              child: Center(child: Text('No note register'.hardcoded)),
+            );
+          }
+        },
       ),
     );
   }
