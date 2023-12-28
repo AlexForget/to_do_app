@@ -14,8 +14,8 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   }
 
   void _addNote(AddNote event, Emitter<NoteListState> emit) {
+    event.note.id = getNextAfterHighest(state.notes);
     state.notes = [...state.notes, event.note];
-    //state.notes.add(event.note);
     emit(NoteListUpdated(notes: state.notes));
   }
 
@@ -31,5 +31,18 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
       }
     }
     emit(NoteListUpdated(notes: state.notes));
+  }
+
+  int getNextAfterHighest(List<NoteModel> notes) {
+    if (notes.isEmpty) return 0;
+
+    List<int> notesId = [];
+    for (var note in notes) {
+      notesId.add(note.id!);
+    }
+    notesId.sort();
+    int highest = notesId.last;
+    int nextAfterHighest = highest + 1;
+    return nextAfterHighest;
   }
 }

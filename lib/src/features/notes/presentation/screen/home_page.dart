@@ -32,9 +32,12 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Checkbox(
-              value: note.completed,
-              onChanged: (value) => value = false, // TODO : UPDATE
-            ),
+                value: note.completed,
+                onChanged: (value) {
+                  note.completed = value!;
+                  context.read<NoteListBloc>().add(UpdateNote(note: note));
+                } // TODO : UPDATE
+                ),
             Expanded(
               child: Text(
                 note.description,
@@ -49,7 +52,46 @@ class _HomePageState extends State<HomePage> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.edit),
-                  onPressed: () {}, // TODO : UPDATE
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        TextEditingController descriptionController =
+                            TextEditingController(text: note.description);
+                        return AlertDialog(
+                          title: Text(AppLocalizations.of(context)!.modifyNote),
+                          content: TextField(
+                            textCapitalization: TextCapitalization.sentences,
+                            controller: descriptionController,
+                            minLines: 1,
+                            maxLines: 5,
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(AppLocalizations.of(context)!.cancel),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                note.description =
+                                    descriptionController.text.trim();
+                                context
+                                    .read<NoteListBloc>()
+                                    .add(UpdateNote(note: note));
+                                Navigator.pop(context);
+                                descriptionController.text = '';
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.record,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 IconButton(
@@ -59,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                     context.read<NoteListBloc>().add(
                           DeleteNote(note: note),
                         );
-                  }, // TODO : UPDATE
+                  },
                 ),
               ],
             ),
@@ -69,10 +111,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void showCustomDialog({
+  void showAddNoteCustomDialog({
     required BuildContext context,
     bool isEdit = false,
-    required int id,
   }) =>
       showDialog(
         context: context,
@@ -97,14 +138,15 @@ class _HomePageState extends State<HomePage> {
               ),
               TextButton(
                 onPressed: () {
-                  context.read<NoteListBloc>().add(
-                        AddNote(
-                          note: NoteModel(
-                              description: descriptionController.text.trim(),
-                              completed: false,
-                              id: id),
-                        ),
-                      );
+                  final note = NoteModel(
+                    description: descriptionController.text.trim(),
+                    completed: false,
+                  );
+                  if (isEdit) {
+                    context.read<NoteListBloc>().add(UpdateNote(note: note));
+                  } else {
+                    context.read<NoteListBloc>().add(AddNote(note: note));
+                  }
                   Navigator.pop(context);
                   descriptionController.text = '';
                 },
@@ -127,9 +169,7 @@ class _HomePageState extends State<HomePage> {
         label: Text(AppLocalizations.of(context)!.add),
         icon: const Icon(Icons.add),
         onPressed: () {
-          final state = context.read<NoteListBloc>().state;
-          final id = state.notes.length;
-          showCustomDialog(context: context, id: id);
+          showAddNoteCustomDialog(context: context);
         },
       ),
       appBar: AppBar(
