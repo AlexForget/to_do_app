@@ -16,8 +16,12 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(NoteModelAdapter());
   // ignore: unused_local_variable
-  boxNotes = await Hive.openBox(noteHiveBox);
+  boxNotes = await Hive.openBox<NoteModel>(noteHiveBox);
   Bloc.observer = const SimpleBlocObserver();
+  // boxNotes.close();
+  // boxNotes.deleteAt(0);
+  // boxNotes.compact;
+  print('Box : ${boxNotes.values}');
   runApp(const MyApp());
 }
 
@@ -33,7 +37,9 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => NoteListBloc(),
       child: MultiBlocProvider(
-        providers: [BlocProvider(create: (contect) => NoteListBloc())],
+        providers: [
+          BlocProvider(create: (contect) => NoteListBloc()..add(InitialNote()))
+        ],
         child: MaterialApp(
           onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
           debugShowCheckedModeBanner: false,
@@ -41,7 +47,7 @@ class MyApp extends StatelessWidget {
             fontFamily: GoogleFonts.bitter().fontFamily,
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.blue,
+              seedColor: Colors.orange,
               brightness: Brightness.light,
             ),
           ),

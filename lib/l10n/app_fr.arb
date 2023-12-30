@@ -10,5 +10,6 @@
     "confirmDeleteNote": "Confirmer la suppresion de la note",
     "cancel": "Annuler",
     "record": "Enregistrer",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "noNoteRegister": "Aucune note n'a encore été enregistré"
 }

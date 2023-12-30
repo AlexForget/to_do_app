@@ -4,20 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
-import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Widget buildNoteTile(BuildContext context, NoteModel note) {
     return Padding(
@@ -32,12 +21,12 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Checkbox(
-                value: note.completed,
-                onChanged: (value) {
-                  note.completed = value!;
-                  context.read<NoteListBloc>().add(UpdateNote(note: note));
-                } // TODO : UPDATE
-                ),
+              value: note.completed,
+              onChanged: (value) {
+                note.completed = value!;
+                context.read<NoteListBloc>().add(UpdateNote(note: note));
+              },
+            ),
             Expanded(
               child: Text(
                 note.description,
@@ -183,7 +172,8 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocBuilder<NoteListBloc, NoteListState>(
         builder: (context, state) {
-          if (state is NoteListUpdated && state.notes.isNotEmpty) {
+          if ((state is NoteListUpdated || state is NoteListInitial) &&
+              state.notes.isNotEmpty) {
             final notes = state.notes;
             return ListView.builder(
               itemCount: notes.length,
@@ -195,7 +185,8 @@ class _HomePageState extends State<HomePage> {
           } else {
             return SizedBox(
               width: double.infinity,
-              child: Center(child: Text('No note register'.hardcoded)),
+              child: Center(
+                  child: Text(AppLocalizations.of(context)!.noNoteRegister)),
             );
           }
         },

@@ -16,5 +16,6 @@
   "confirmDeleteNote": "Confirm note delete",
   "cancel": "Cancel",
   "record": "Save",
-  "delete": "Delete"
+  "delete": "Delete",
+  "noNoteRegister": "No notes have been recorded yet"
 }
