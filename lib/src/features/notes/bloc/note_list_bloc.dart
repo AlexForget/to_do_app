@@ -1,26 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
+import 'package:to_do_app/src/helpers/constants.dart';
 
 part 'note_list_event.dart';
 part 'note_list_state.dart';
 
 class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   NoteListBloc() : super(NoteListInitial(notes: const [])) {
+    on<InitialNote>(_initialNote);
     on<AddNote>(_addNote);
     on<DeleteNote>(_deleteNote);
     on<UpdateNote>(_updateNote);
   }
 
+  void _initialNote(InitialNote event, Emitter<NoteListState> emit) {
+    final box = Hive.box<NoteModel>(noteHiveBox);
+    List<NoteModel> notes = box.values.toList();
+    emit(NoteListInitial(notes: notes));
+  }
+
   void _addNote(AddNote event, Emitter<NoteListState> emit) {
     event.note.id = getNextAfterHighest(state.notes);
     state.notes = [...state.notes, event.note];
+    boxNotes.add(event.note);
     emit(NoteListUpdated(notes: state.notes));
   }
 
   void _deleteNote(DeleteNote event, Emitter<NoteListState> emit) {
     state.notes.remove(event.note);
+    boxNotes.delete(event.note.id);
     emit(NoteListUpdated(notes: state.notes));
   }
 
@@ -28,6 +40,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     for (var i = 0; i < state.notes.length; i++) {
       if (event.note.id == state.notes[i].id) {
         state.notes[i] = event.note;
+        boxNotes.put(event.note.id, event.note);
       }
     }
     emit(NoteListUpdated(notes: state.notes));

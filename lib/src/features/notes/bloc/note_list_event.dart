@@ -4,6 +4,8 @@ part of 'note_list_bloc.dart';
 @immutable
 abstract class NoteListEvent {}
 
+class InitialNote extends NoteListEvent {}
+
 class AddNote extends NoteListEvent {
   final NoteModel note;
   AddNote({required this.note});

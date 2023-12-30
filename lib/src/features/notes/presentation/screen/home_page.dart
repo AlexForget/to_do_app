@@ -183,7 +183,8 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocBuilder<NoteListBloc, NoteListState>(
         builder: (context, state) {
-          if (state is NoteListUpdated && state.notes.isNotEmpty) {
+          if ((state is NoteListUpdated || state is NoteListInitial) &&
+              state.notes.isNotEmpty) {
             final notes = state.notes;
             return ListView.builder(
               itemCount: notes.length,
