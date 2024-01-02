@@ -17,6 +17,8 @@ void main() async {
   Hive.registerAdapter(NoteModelAdapter());
   // ignore: unused_local_variable
   boxNotes = await Hive.openBox<NoteModel>(noteHiveBox);
+  // boxNotes.deleteAt(0);
+  print(boxNotes.values);
   Bloc.observer = const SimpleBlocObserver();
   runApp(const MyApp());
 }

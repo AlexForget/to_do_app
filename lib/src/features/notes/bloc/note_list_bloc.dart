@@ -31,18 +31,15 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   }
 
   void _deleteNote(DeleteNote event, Emitter<NoteListState> emit) {
+    int indexToDelete = getNoteIndexFromList(state.notes, event.note);
     state.notes.remove(event.note);
-    boxNotes.delete(event.note.id);
+    boxNotes.deleteAt(indexToDelete);
     emit(NoteListUpdated(notes: state.notes));
   }
 
   void _updateNote(UpdateNote event, Emitter<NoteListState> emit) {
-    for (var i = 0; i < state.notes.length; i++) {
-      if (event.note.id == state.notes[i].id) {
-        state.notes[i] = event.note;
-        boxNotes.put(event.note.id, event.note);
-      }
-    }
+    int noteToUpdate = getNoteIndexFromList(state.notes, event.note);
+    boxNotes.putAt(noteToUpdate, event.note);
     emit(NoteListUpdated(notes: state.notes));
   }
 
@@ -57,5 +54,14 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     int highest = notesId.last;
     int nextAfterHighest = highest + 1;
     return nextAfterHighest;
+  }
+
+  int getNoteIndexFromList(List<NoteModel> notes, NoteModel note) {
+    for (var i = 0; i < notes.length; i++) {
+      if (note.id == notes[i].id) {
+        return i;
+      }
+    }
+    return -1;
   }
 }
