@@ -18,7 +18,7 @@ void main() async {
   // ignore: unused_local_variable
   boxNotes = await Hive.openBox<NoteModel>(noteHiveBox);
   // boxNotes.deleteAt(0);
-  print(boxNotes.values);
+  // print(boxNotes.values);
   Bloc.observer = const SimpleBlocObserver();
   runApp(const MyApp());
 }
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             fontFamily: GoogleFonts.bitter().fontFamily,
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.orange,
+              seedColor: Colors.green,
               brightness: Brightness.light,
             ),
           ),
