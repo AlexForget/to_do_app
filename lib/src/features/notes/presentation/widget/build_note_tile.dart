@@ -72,13 +72,15 @@ class BuildNoteTile extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                note.description =
-                                    descriptionController.text.trim();
-                                context
-                                    .read<NoteListBloc>()
-                                    .add(UpdateNote(note: note));
-                                Navigator.pop(context);
-                                descriptionController.text = '';
+                                if (descriptionController.text.isNotEmpty) {
+                                  note.description =
+                                      descriptionController.text.trim();
+                                  context
+                                      .read<NoteListBloc>()
+                                      .add(UpdateNote(note: note));
+                                  Navigator.pop(context);
+                                  descriptionController.text = '';
+                                }
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.record,
