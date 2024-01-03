@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/notes/presentation/widget/delete_note_alert_dialog.dart';
+import 'package:to_do_app/src/features/notes/presentation/widget/edit_note_alert_dialog.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
 
 class BuildNoteTile extends StatelessWidget {
@@ -55,38 +56,9 @@ class BuildNoteTile extends StatelessWidget {
                       builder: (context) {
                         TextEditingController descriptionController =
                             TextEditingController(text: note.description);
-                        return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.modifyNote),
-                          content: TextField(
-                            textCapitalization: TextCapitalization.sentences,
-                            controller: descriptionController,
-                            minLines: 1,
-                            maxLines: 5,
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text(AppLocalizations.of(context)!.cancel),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                if (descriptionController.text.isNotEmpty) {
-                                  note.description =
-                                      descriptionController.text.trim();
-                                  context
-                                      .read<NoteListBloc>()
-                                      .add(UpdateNote(note: note));
-                                  Navigator.pop(context);
-                                  descriptionController.text = '';
-                                }
-                              },
-                              child: Text(
-                                AppLocalizations.of(context)!.record,
-                              ),
-                            ),
-                          ],
+                        return EditNoteAlertDialog(
+                          descriptionController: descriptionController,
+                          note: note,
                         );
                       },
                     );
@@ -100,28 +72,7 @@ class BuildNoteTile extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.delete),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text(AppLocalizations.of(context)!.cancel),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.read<NoteListBloc>().add(
-                                      DeleteNote(note: note),
-                                    );
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                AppLocalizations.of(context)!.deleteNote,
-                              ),
-                            ),
-                          ],
-                        );
+                        return DeleteNoteAlertDialog(note: note);
                       },
                     );
                   },

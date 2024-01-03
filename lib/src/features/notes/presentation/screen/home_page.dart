@@ -81,7 +81,8 @@ class _HomePageState extends State<HomePage> {
           } else {
             return SizedBox(
               width: double.infinity,
-              child: Center(child: Text('No note register'.hardcoded)),
+              child: Center(
+                  child: Text(AppLocalizations.of(context)!.noteNoteRegister)),
             );
           }
         },
