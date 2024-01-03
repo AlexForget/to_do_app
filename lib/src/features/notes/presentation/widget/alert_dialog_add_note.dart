@@ -33,13 +33,15 @@ class AlertDialogAddNote extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            final note = NoteModel(
-              description: descriptionController.text.trim(),
-              completed: false,
-            );
-            context.read<NoteListBloc>().add(AddNote(note: note));
-            Navigator.pop(context);
-            descriptionController.text = '';
+            if (descriptionController.text.isNotEmpty) {
+              final note = NoteModel(
+                description: descriptionController.text.trim(),
+                completed: false,
+              );
+              context.read<NoteListBloc>().add(AddNote(note: note));
+              Navigator.pop(context);
+              descriptionController.text = '';
+            }
           },
           child: Text(
             AppLocalizations.of(context)!.record,
