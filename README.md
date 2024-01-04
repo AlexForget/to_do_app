@@ -1,4 +1,4 @@
-# Simple to-do 
+# Simple to-do list
 
 This simple to-do app as for goal to learning the basic of flutter development
 
