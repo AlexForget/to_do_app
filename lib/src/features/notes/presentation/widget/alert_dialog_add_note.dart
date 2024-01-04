@@ -17,6 +17,7 @@ class AlertDialogAddNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime? notificationTime;
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.record),
       content: Column(
@@ -40,7 +41,7 @@ class AlertDialogAddNote extends StatelessWidget {
                     backgroundColor: Theme.of(context).colorScheme.background,
                   ),
                   onPressed: () async {
-                    DateTime? notificationTime =
+                    notificationTime =
                         await showOmniDateTimePicker(context: context);
                   },
                   child: Row(
@@ -77,6 +78,7 @@ class AlertDialogAddNote extends StatelessWidget {
               final note = NoteModel(
                 description: descriptionController.text.trim(),
                 completed: false,
+                notification: notificationTime,
               );
               context.read<NoteListBloc>().add(AddNote(note: note));
               Navigator.pop(context);

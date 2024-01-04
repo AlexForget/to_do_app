@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                     return BuildNoteTile(
                       context: context,
                       note: note,
-                      key: Key(notes[index].id.toString()),
+                      key: ObjectKey(note), //Key(notes[index].id.toString()),
                     );
                   },
                 ),
