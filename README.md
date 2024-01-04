@@ -1,16 +1,31 @@
-# to_do_app
+# Simple to-do 
 
-A new Flutter project.
+This simple to-do app as for goal to learning the basic of flutter development
 
-## Getting Started
+## Description
 
-This project is a starting point for a Flutter application.
+This application is used to keep a list of task to-do. 
+The task can be added, edit, cross as completed, deleted and move in the list. An optional local notification can be set at a time and date of choice.
+The first use of the application was to learn the basic of development in Flutter.  The primary reason I choose Flutter is to be able to deploy the application on multiple platform with only one codebase.
 
-A few resources to get you started if this is your first Flutter project:
+At first, the application will only be available for Android, but I'm looking to develop a web version. For this, A backend will be need because for now, the data are only saved locally with Flutter Hive. Once the first version of the application will be completed, I plan to use Firebase to make it usable between the different platform.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+Once the first version of the application will be completed. It will be available to install through the Google Play Store.
+
+## Credits
+
+The entirety of the application has been development by myself with the help of these package:
+  
+[An flutter_bloc Link](https://github.com/felangel/bloc/tree/master)  
+[flutter_local_notifications](https://github.com/MaikuB/flutter_local_notifications)  
+[omni_datetime_picker](https://github.com/alanchan-dev/OmniDateTimePicker)  
+[flutter_launcher_icons](https://github.com/fluttercommunity/flutter_launcher_icons)  
+[hive_flutter](https://github.com/isar/hive)  
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
