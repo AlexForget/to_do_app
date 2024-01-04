@@ -12,6 +12,7 @@ part 'note_list_state.dart';
 class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   NoteListBloc() : super(NoteListInitial(notes: const [])) {
     on<InitialNote>(_initialNote);
+    on<ReorderedList>(_reorderedNote);
     on<AddNote>(_addNote);
     on<DeleteNote>(_deleteNote);
     on<UpdateNote>(_updateNote);
@@ -21,6 +22,21 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     final box = Hive.box<NoteModel>(noteHiveBox);
     List<NoteModel> notes = box.values.toList();
     emit(NoteListInitial(notes: notes));
+  }
+
+  void _reorderedNote(ReorderedList event, Emitter<NoteListState> emit) async {
+    int newIndex = event.newIndex;
+    int oldIndex = event.oldIndex;
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final note = state.notes.removeAt(oldIndex);
+    state.notes.insert(newIndex, note);
+    await boxNotes.clear();
+    for (var i = 0; i < state.notes.length; i++) {
+      boxNotes.put(i, state.notes[i]);
+    }
+    emit(NoteListUpdated(notes: state.notes));
   }
 
   void _addNote(AddNote event, Emitter<NoteListState> emit) {

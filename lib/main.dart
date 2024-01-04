@@ -18,7 +18,8 @@ void main() async {
   // ignore: unused_local_variable
   boxNotes = await Hive.openBox<NoteModel>(noteHiveBox);
   // boxNotes.deleteAt(0);
-  // print(boxNotes.values);
+  // await boxNotes.clear();
+  print(boxNotes.values);
   Bloc.observer = const SimpleBlocObserver();
   runApp(const MyApp());
 }

@@ -8,7 +8,6 @@ import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/presentation/widget/build_note_tile.dart';
 import 'package:to_do_app/src/features/notes/presentation/widget/alert_dialog_add_note.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
-import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -70,12 +69,25 @@ class _HomePageState extends State<HomePage> {
                 }
                 return true;
               },
-              child: ListView.builder(
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  final note = notes[index];
-                  return BuildNoteTile(context: context, note: note);
-                },
+              child: Padding(
+                padding: const EdgeInsets.only(top: Sizes.p4),
+                child: ReorderableListView.builder(
+                  onReorder: (oldIndex, newIndex) {
+                    context.read<NoteListBloc>().add(ReorderedList(
+                        oldIndex: oldIndex,
+                        newIndex: newIndex,
+                        note: state.notes[oldIndex]));
+                  },
+                  itemCount: notes.length,
+                  itemBuilder: (context, index) {
+                    final note = notes[index];
+                    return BuildNoteTile(
+                      context: context,
+                      note: note,
+                      key: Key(notes[index].id.toString()),
+                    );
+                  },
+                ),
               ),
             );
           } else {
