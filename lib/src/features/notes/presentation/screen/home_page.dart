@@ -73,10 +73,8 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(top: Sizes.p4),
                 child: ReorderableListView.builder(
                   onReorder: (oldIndex, newIndex) {
-                    context.read<NoteListBloc>().add(ReorderedList(
-                        oldIndex: oldIndex,
-                        newIndex: newIndex,
-                        note: state.notes[oldIndex]));
+                    context.read<NoteListBloc>().add(
+                        ReorderedList(oldIndex: oldIndex, newIndex: newIndex));
                   },
                   itemCount: notes.length,
                   itemBuilder: (context, index) {
