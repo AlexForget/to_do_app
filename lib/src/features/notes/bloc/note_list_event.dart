@@ -6,6 +6,14 @@ abstract class NoteListEvent {}
 
 class InitialNote extends NoteListEvent {}
 
+class ReorderedList extends NoteListEvent {
+  final NoteModel note;
+  final int oldIndex;
+  final int newIndex;
+  ReorderedList(
+      {required this.note, required this.oldIndex, required this.newIndex});
+}
+
 class AddNote extends NoteListEvent {
   final NoteModel note;
   AddNote({required this.note});
