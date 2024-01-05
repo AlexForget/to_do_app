@@ -11,5 +11,7 @@
     "cancel": "Annuler",
     "record": "Enregistrer",
     "delete": "Supprimer",
-    "noteNoteRegister": "Aucunte note n'a encore été enregistré"
+    "noteNoteRegister": "Aucunte note n'a encore été enregistré",
+    "addReminder": "Ajouter une rappel",
+    "notificationWillBeSent": "Une notification sera envoyé le"
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,6 +12,11 @@ import 'package:to_do_app/src/helpers/bloc_obesrver.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:to_do_app/src/features/notes/presentation/screen/home_page.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+
 void main() async {
   // ignore: await_only_futures
   await Hive.initFlutter();
@@ -19,8 +25,16 @@ void main() async {
   boxNotes = await Hive.openBox<NoteModel>(noteHiveBox);
   // boxNotes.deleteAt(0);
   // await boxNotes.clear();
-  print(boxNotes.values);
+  // print(boxNotes.values);
   Bloc.observer = const SimpleBlocObserver();
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   runApp(const MyApp());
 }
 
