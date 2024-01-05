@@ -23,8 +23,8 @@ The entirety of the application has been development by myself with the help of
 [flutter_local_notifications](https://github.com/MaikuB/flutter_local_notifications)  
 [omni_datetime_picker](https://github.com/alanchan-dev/OmniDateTimePicker)  
 [flutter_launcher_icons](https://github.com/fluttercommunity/flutter_launcher_icons)  
-[hive_flutter](https://github.com/isar/hive)  
-[timezone)(https://pub.dev/packages/timezone)
+[hive_flutter](https://github.com/isar/hive)
+[timezone]([https://github.com/isar/hive](https://pub.dev/packages/timezone)
 
 
 ## License
