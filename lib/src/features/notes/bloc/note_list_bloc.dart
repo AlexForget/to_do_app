@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:hive/hive.dart';
+import 'package:timezone/standalone.dart';
+import 'package:to_do_app/main.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 part 'note_list_event.dart';
 part 'note_list_state.dart';
@@ -39,10 +45,13 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     emit(NoteListUpdated(notes: state.notes));
   }
 
-  void _addNote(AddNote event, Emitter<NoteListState> emit) {
+  Future<void> _addNote(AddNote event, Emitter<NoteListState> emit) async {
     event.note.id = getNextAfterHighest(state.notes);
     state.notes = [...state.notes, event.note];
     boxNotes.add(event.note);
+    if (event.note.notification != null) {
+      await sendNotification(event);
+    }
     emit(NoteListUpdated(notes: state.notes));
   }
 
@@ -50,6 +59,9 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     int indexToDelete = getNoteIndexFromList(state.notes, event.note);
     state.notes.remove(event.note);
     boxNotes.deleteAt(indexToDelete);
+    if (event.note.notification != null) {
+      flutterLocalNotificationsPlugin.cancel(event.note.id!);
+    }
     emit(NoteListUpdated(notes: state.notes));
   }
 
@@ -79,5 +91,37 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
       }
     }
     return -1;
+  }
+
+  Future<void> sendNotification(AddNote event) async {
+    final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+    final location = tz.getLocation(currentTimeZone);
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+            notificationChannelId, notificationChannelName,
+            channelDescription: notificationChannelDescription,
+            importance: Importance.max,
+            priority: Priority.high);
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        event.note.id!,
+        notificationDefaultTitle,
+        event.note.description,
+        TZDateTime.from(event.note.notification!, location),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        notificationDetails,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 }
