@@ -1,13 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
-import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 
-class AlertDialogAddNote extends StatelessWidget {
+class AlertDialogAddNote extends StatefulWidget {
   const AlertDialogAddNote({
     super.key,
     required this.descriptionController,
@@ -16,8 +17,14 @@ class AlertDialogAddNote extends StatelessWidget {
   final TextEditingController descriptionController;
 
   @override
+  State<AlertDialogAddNote> createState() => _AlertDialogAddNoteState();
+}
+
+class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
+  DateTime? notificationTime;
+  String formattedDate = '';
+  @override
   Widget build(BuildContext context) {
-    DateTime? notificationTime;
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.record),
       content: Column(
@@ -25,7 +32,7 @@ class AlertDialogAddNote extends StatelessWidget {
         children: [
           TextField(
             textCapitalization: TextCapitalization.sentences,
-            controller: descriptionController,
+            controller: widget.descriptionController,
             decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.addNewNote),
             minLines: 1,
@@ -41,17 +48,18 @@ class AlertDialogAddNote extends StatelessWidget {
                     backgroundColor: Theme.of(context).colorScheme.background,
                   ),
                   onPressed: () async {
-                    notificationTime =
-                        await showOmniDateTimePicker(context: context);
+                    setNotification();
                   },
                   child: Row(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: Sizes.p12),
-                        child: Text("Ajouter une rappel".hardcoded,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                            )),
+                        child: Text(
+                          AppLocalizations.of(context)!.addReminder,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                       ),
                       Icon(
                         Icons.calendar_today,
@@ -63,6 +71,14 @@ class AlertDialogAddNote extends StatelessWidget {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: Sizes.p16),
+            child: notificationTime != null
+                ? Text(
+                    textAlign: TextAlign.center,
+                    '${AppLocalizations.of(context)!.notificationWillBeSent} $formattedDate')
+                : null,
+          )
         ],
       ),
       actions: <Widget>[
@@ -74,15 +90,15 @@ class AlertDialogAddNote extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            if (descriptionController.text.isNotEmpty) {
+            if (widget.descriptionController.text.isNotEmpty) {
               final note = NoteModel(
-                description: descriptionController.text.trim(),
+                description: widget.descriptionController.text.trim(),
                 completed: false,
                 notification: notificationTime,
               );
               context.read<NoteListBloc>().add(AddNote(note: note));
               Navigator.pop(context);
-              descriptionController.text = '';
+              widget.descriptionController.text = '';
             }
           },
           child: Text(
@@ -91,5 +107,20 @@ class AlertDialogAddNote extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void setNotification() async {
+    final String deviceLocal = Platform.localeName;
+    notificationTime = await showOmniDateTimePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      is24HourMode: true,
+    );
+    if (notificationTime != null) {
+      setState(() {
+        formattedDate =
+            DateFormat.MMMd(deviceLocal).add_Hm().format(notificationTime!);
+      });
+    }
   }
 }

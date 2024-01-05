@@ -114,14 +114,23 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
+    if (event.note.notification!.isBefore(DateTime.now())) {
+      await flutterLocalNotificationsPlugin.show(
         event.note.id!,
         notificationDefaultTitle,
         event.note.description,
-        TZDateTime.from(event.note.notification!, location),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         notificationDetails,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+      );
+    } else {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          event.note.id!,
+          notificationDefaultTitle,
+          event.note.description,
+          TZDateTime.from(event.note.notification!, location),
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          notificationDetails,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime);
+    }
   }
 }

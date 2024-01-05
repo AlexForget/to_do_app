@@ -17,5 +17,7 @@
   "cancel": "Cancel",
   "record": "Save",
   "delete": "Delete",
-  "noteNoteRegister": "No notes have been recorded yet"
+  "noteNoteRegister": "No notes have been recorded yet",
+  "addReminder": "Add a reminder",
+  "notificationWillBeSent": "A notification will be sent on"
 }
