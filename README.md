@@ -17,7 +17,7 @@ Once the first version of the application will be completed. It will be availabl
 
 ## Credits
 
-The entirety of the application has been development by myself with the help of these package:
+The entirety of the application has been development by myself with the help of these packages:
   
 [An flutter_bloc Link](https://github.com/felangel/bloc/tree/master)  
 [flutter_local_notifications](https://github.com/MaikuB/flutter_local_notifications)  
