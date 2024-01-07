@@ -50,7 +50,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     state.notes = [...state.notes, event.note];
     boxNotes.add(event.note);
     if (event.note.notification != null) {
-      await sendNotification(event);
+      await sendNotification(event.note);
     }
     emit(NoteListUpdated(notes: state.notes));
   }
@@ -65,9 +65,15 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     emit(NoteListUpdated(notes: state.notes));
   }
 
-  void _updateNote(UpdateNote event, Emitter<NoteListState> emit) {
+  Future<void> _updateNote(
+      UpdateNote event, Emitter<NoteListState> emit) async {
     int noteToUpdate = getNoteIndexFromList(state.notes, event.note);
     boxNotes.putAt(noteToUpdate, event.note);
+    if (event.note.notification != null && event.note.completed) {
+      flutterLocalNotificationsPlugin.cancel(event.note.id!);
+    } else if (event.note.notification != null) {
+      await sendNotification(event.note);
+    }
     emit(NoteListUpdated(notes: state.notes));
   }
 
@@ -93,7 +99,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     return -1;
   }
 
-  Future<void> sendNotification(AddNote event) async {
+  Future<void> sendNotification(NoteModel note) async {
     final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
 
     tz.initializeTimeZones();
@@ -114,19 +120,19 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
-    if (event.note.notification!.isBefore(DateTime.now())) {
+    if (note.notification!.isBefore(DateTime.now())) {
       await flutterLocalNotificationsPlugin.show(
-        event.note.id!,
+        note.id!,
         notificationDefaultTitle,
-        event.note.description,
+        note.description,
         notificationDetails,
       );
     } else {
       await flutterLocalNotificationsPlugin.zonedSchedule(
-          event.note.id!,
+          note.id!,
           notificationDefaultTitle,
-          event.note.description,
-          TZDateTime.from(event.note.notification!, location),
+          note.description,
+          TZDateTime.from(note.notification!, location),
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           notificationDetails,
           uiLocalNotificationDateInterpretation:
