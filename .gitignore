@@ -10,6 +10,7 @@
 .svn/
 migrate_working_dir/
 /home/alexandreqc26/Projets/Flutter/to_do_app/android/key.properties
+/home/alexandreqc26/Projets/Flutter/to_do_app/index.html
 
 # IntelliJ related
 *.iml
