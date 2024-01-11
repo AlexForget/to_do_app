@@ -7,17 +7,21 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
+import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 
-class AlertDialogAddNote extends StatefulWidget {
-  AlertDialogAddNote({super.key});
+class AddNotification extends StatefulWidget {
+  const AddNotification({
+    super.key,
+    required this.descriptionController,
+  });
 
-  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController descriptionController;
 
   @override
-  State<AlertDialogAddNote> createState() => _AlertDialogAddNoteState();
+  State<AddNotification> createState() => _AddNotificationState();
 }
 
-class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
+class _AddNotificationState extends State<AddNotification> {
   static const List<String> notificationType = <String>[
     'Unique',
     'Weekly',
@@ -26,11 +30,19 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
   ];
   DateTime? notificationTime;
   String formattedDate = '';
+
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.record),
-      content: Column(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Ajouter une note'.hardcoded),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 4.0,
+        shadowColor: Theme.of(context).colorScheme.onBackground,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
@@ -88,34 +100,39 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
                 notificationType.map<DropdownMenuEntry<String>>((String value) {
               return DropdownMenuEntry(value: value, label: value);
             }).toList(),
+          ),
+          Expanded(
+            child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(AppLocalizations.of(context)!.cancel),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (widget.descriptionController.text.isNotEmpty) {
+                        final note = NoteModel(
+                          description: widget.descriptionController.text.trim(),
+                          completed: false,
+                          notification: notificationTime,
+                        );
+                        context.read<NoteListBloc>().add(AddNote(note: note));
+                        Navigator.pop(context);
+                        widget.descriptionController.text = '';
+                      }
+                    },
+                    child: Text(AppLocalizations.of(context)!.record),
+                  ),
+                ],
+              ),
+            ),
           )
         ],
       ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(AppLocalizations.of(context)!.cancel),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        TextButton(
-          onPressed: () {
-            if (widget.descriptionController.text.isNotEmpty) {
-              final note = NoteModel(
-                description: widget.descriptionController.text.trim(),
-                completed: false,
-                notification: notificationTime,
-              );
-              context.read<NoteListBloc>().add(AddNote(note: note));
-              Navigator.pop(context);
-              widget.descriptionController.text = '';
-            }
-          },
-          child: Text(
-            AppLocalizations.of(context)!.record,
-          ),
-        ),
-      ],
     );
   }
 
