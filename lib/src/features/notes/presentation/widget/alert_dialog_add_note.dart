@@ -7,6 +7,7 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
+import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 
 class AlertDialogAddNote extends StatefulWidget {
   AlertDialogAddNote({super.key});
@@ -30,66 +31,69 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.record),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            textCapitalization: TextCapitalization.sentences,
-            controller: widget.descriptionController,
-            decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)!.addNewNote),
-            minLines: 1,
-            maxLines: 5,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: Sizes.p20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                  ),
-                  onPressed: () async {
-                    setNotification();
-                  },
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: Sizes.p12),
-                        child: Text(
-                          AppLocalizations.of(context)!.addReminder,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              textCapitalization: TextCapitalization.sentences,
+              controller: widget.descriptionController,
+              decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.addNewNote),
+              minLines: 1,
+              maxLines: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: Sizes.p20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                    ),
+                    onPressed: () async {
+                      setNotification();
+                    },
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: Sizes.p12),
+                          child: Text(
+                            AppLocalizations.of(context)!.addReminder,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
                         ),
-                      ),
-                      Icon(
-                        Icons.calendar_today,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ],
+                        Icon(
+                          Icons.calendar_today,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: Sizes.p16, bottom: Sizes.p16),
-            child: notificationTime != null
-                ? Text(
-                    textAlign: TextAlign.center,
-                    '${AppLocalizations.of(context)!.notificationWillBeSent} $formattedDate')
-                : null,
-          ),
-          DropdownMenu<String>(
-            initialSelection: notificationType.first,
-            dropdownMenuEntries:
-                notificationType.map<DropdownMenuEntry<String>>((String value) {
-              return DropdownMenuEntry(value: value, label: value);
-            }).toList(),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: Sizes.p16, bottom: Sizes.p16),
+              child: notificationTime != null
+                  ? Text(
+                      textAlign: TextAlign.center,
+                      '${AppLocalizations.of(context)!.notificationWillBeSent} $formattedDate')
+                  : null,
+            ),
+            DropdownMenu<String>(
+              label: Text('Frequency'.hardcoded),
+              initialSelection: notificationType.first,
+              dropdownMenuEntries: notificationType
+                  .map<DropdownMenuEntry<String>>((String value) {
+                return DropdownMenuEntry(value: value, label: value);
+              }).toList(),
+            )
+          ],
+        ),
       ),
       actions: <Widget>[
         TextButton(

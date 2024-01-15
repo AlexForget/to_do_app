@@ -24,65 +24,68 @@ class BuildNoteTile extends StatelessWidget {
       padding: const EdgeInsets.only(
           left: Sizes.p12, right: Sizes.p12, top: Sizes.p4, bottom: Sizes.p4),
       child: Container(
-        padding: const EdgeInsets.all(Sizes.p8),
+        padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(radius8),
             color: Theme.of(context).colorScheme.primaryContainer),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Icon(Icons.drag_handle),
-            Checkbox(
-              value: note.completed,
-              onChanged: (value) {
-                note.completed = value!;
-                context.read<NoteListBloc>().add(UpdateNote(note: note));
-              },
-            ),
-            Expanded(
-              child: Text(
-                note.description,
-                style: TextStyle(
-                  decoration: note.completed
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
+        child: Padding(
+          padding: const EdgeInsets.only(left: Sizes.p8, right: Sizes.p8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Icon(Icons.drag_handle),
+              Checkbox(
+                value: note.completed,
+                onChanged: (value) {
+                  note.completed = value!;
+                  context.read<NoteListBloc>().add(UpdateNote(note: note));
+                },
+              ),
+              Expanded(
+                child: Text(
+                  note.description,
+                  style: TextStyle(
+                    decoration: note.completed
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                  ),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        TextEditingController descriptionController =
-                            TextEditingController(text: note.description);
-                        return EditNoteAlertDialog(
-                          descriptionController: descriptionController,
-                          note: note,
-                        );
-                      },
-                    );
-                  },
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  color: Theme.of(context).colorScheme.primary,
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return DeleteNoteAlertDialog(note: note);
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          TextEditingController descriptionController =
+                              TextEditingController(text: note.description);
+                          return EditNoteAlertDialog(
+                            descriptionController: descriptionController,
+                            note: note,
+                          );
+                        },
+                      );
+                    },
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return DeleteNoteAlertDialog(note: note);
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

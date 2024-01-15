@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
-import 'package:to_do_app/src/features/notes/presentation/screen/add_notification_page.dart';
 import 'package:to_do_app/src/features/notes/presentation/widget/build_note_tile.dart';
 import 'package:to_do_app/src/features/notes/presentation/widget/alert_dialog_add_note.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
@@ -35,20 +34,12 @@ class _HomePageState extends State<HomePage> {
               label: Text(AppLocalizations.of(context)!.add),
               icon: const Icon(Icons.add),
               onPressed: () {
-                TextEditingController descriptionController =
-                    TextEditingController();
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AddNotification(
-                        descriptionController: descriptionController)));
-                // showDialog(
-                //   context: context,
-                //   builder: (context) {
-                //     TextEditingController descriptionController =
-                //         TextEditingController();
-                //     return AlertDialogAddNote(
-                //         descriptionController: descriptionController);
-                //   },
-                // );
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialogAddNote();
+                  },
+                );
               },
             )
           : null,
@@ -56,6 +47,9 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Text(
           AppLocalizations.of(context)!.title,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 4.0,
