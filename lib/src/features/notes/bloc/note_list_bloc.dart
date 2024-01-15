@@ -11,6 +11,7 @@ import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:to_do_app/src/helpers/time_comparaison.dart';
 
 part 'note_list_event.dart';
 part 'note_list_state.dart';
@@ -67,11 +68,15 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
 
   Future<void> _updateNote(
       UpdateNote event, Emitter<NoteListState> emit) async {
-    int noteToUpdate = getNoteIndexFromList(state.notes, event.note);
-    boxNotes.putAt(noteToUpdate, event.note);
+    int indexNoteToUpdate = getNoteIndexFromList(state.notes, event.note);
+    boxNotes.putAt(indexNoteToUpdate, event.note);
+
+    TimeOfDay notificationTime =
+        TimeOfDay.fromDateTime(event.note.notification!);
     if (event.note.notification != null && event.note.completed) {
       flutterLocalNotificationsPlugin.cancel(event.note.id!);
-    } else if (event.note.notification != null) {
+    } else if (event.note.notification != null &&
+        notificationTime.compareTo(TimeOfDay.now())) {
       await sendNotification(event.note);
     }
     emit(NoteListUpdated(notes: state.notes));

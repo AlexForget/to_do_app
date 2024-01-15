@@ -25,7 +25,7 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
     'Monthly',
     'Annualy'
   ];
-  DateTime? notificationTime;
+  DateTime? notificationDateTime;
   String formattedDate = '';
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: Sizes.p16, bottom: Sizes.p16),
-              child: notificationTime != null
+              child: notificationDateTime != null
                   ? Text(
                       textAlign: TextAlign.center,
                       '${AppLocalizations.of(context)!.notificationWillBeSent} $formattedDate')
@@ -108,7 +108,7 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
               final note = NoteModel(
                 description: widget.descriptionController.text.trim(),
                 completed: false,
-                notification: notificationTime,
+                notification: notificationDateTime,
               );
               context.read<NoteListBloc>().add(AddNote(note: note));
               Navigator.pop(context);
@@ -125,15 +125,15 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
 
   void setNotification() async {
     final String deviceLocal = Platform.localeName;
-    notificationTime = await showOmniDateTimePicker(
+    notificationDateTime = await showOmniDateTimePicker(
       context: context,
       firstDate: DateTime.now(),
       is24HourMode: true,
     );
-    if (notificationTime != null) {
+    if (notificationDateTime != null) {
       setState(() {
         formattedDate =
-            DateFormat.MMMd(deviceLocal).add_Hm().format(notificationTime!);
+            DateFormat.MMMd(deviceLocal).add_Hm().format(notificationDateTime!);
       });
     }
   }
