@@ -7,7 +7,6 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
-import 'package:to_do_app/src/localisation/string_hardcoded.dart';
 
 class AlertDialogAddNote extends StatefulWidget {
   AlertDialogAddNote({super.key});
@@ -19,12 +18,6 @@ class AlertDialogAddNote extends StatefulWidget {
 }
 
 class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
-  static const List<String> notificationType = <String>[
-    'Unique',
-    'Weekly',
-    'Monthly',
-    'Annualy'
-  ];
   DateTime? notificationDateTime;
   String formattedDate = '';
   @override
