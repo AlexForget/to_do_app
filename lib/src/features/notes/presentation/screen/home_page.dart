@@ -37,10 +37,7 @@ class _HomePageState extends State<HomePage> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    TextEditingController descriptionController =
-                        TextEditingController();
-                    return AlertDialogAddNote(
-                        descriptionController: descriptionController);
+                    return AlertDialogAddNote();
                   },
                 );
               },
@@ -50,6 +47,9 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Text(
           AppLocalizations.of(context)!.title,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 4.0,

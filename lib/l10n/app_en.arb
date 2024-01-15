@@ -19,5 +19,6 @@
   "delete": "Delete",
   "noteNoteRegister": "No notes have been recorded yet",
   "addReminder": "Add a reminder",
-  "notificationWillBeSent": "A notification will be sent on"
+  "notificationWillBeSent": "A notification will be sent on",
+  "reminder": "Reminder"
 }
