@@ -28,6 +28,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   void _initialNote(InitialNote event, Emitter<NoteListState> emit) {
     final box = Hive.box<NoteModel>(noteHiveBox);
     List<NoteModel> notes = box.values.toList();
+
     emit(NoteListInitial(notes: notes));
   }
 
@@ -71,12 +72,11 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     int indexNoteToUpdate = getNoteIndexFromList(state.notes, event.note);
     boxNotes.putAt(indexNoteToUpdate, event.note);
 
-    TimeOfDay notificationTime =
-        TimeOfDay.fromDateTime(event.note.notification!);
     if (event.note.notification != null && event.note.completed) {
       flutterLocalNotificationsPlugin.cancel(event.note.id!);
     } else if (event.note.notification != null &&
-        notificationTime.compareTo(TimeOfDay.now())) {
+        TimeOfDay.fromDateTime(event.note.notification!)
+            .compareTo(TimeOfDay.now())) {
       await sendNotification(event.note);
     }
     emit(NoteListUpdated(notes: state.notes));
@@ -134,14 +134,15 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
       );
     } else {
       await flutterLocalNotificationsPlugin.zonedSchedule(
-          note.id!,
-          notificationDefaultTitle,
-          note.description,
-          TZDateTime.from(note.notification!, location),
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          notificationDetails,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime);
+        note.id!,
+        notificationDefaultTitle,
+        note.description,
+        TZDateTime.from(note.notification!, location),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        notificationDetails,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
     }
   }
 }

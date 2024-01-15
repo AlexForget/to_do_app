@@ -1,7 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
 import 'package:to_do_app/src/features/notes/presentation/widget/delete_note_alert_dialog.dart';
@@ -20,6 +24,7 @@ class BuildNoteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String deviceLocal = Platform.localeName;
     return Padding(
       padding: const EdgeInsets.only(
           left: Sizes.p12, right: Sizes.p12, top: Sizes.p4, bottom: Sizes.p4),
@@ -42,13 +47,23 @@ class BuildNoteTile extends StatelessWidget {
                 },
               ),
               Expanded(
-                child: Text(
-                  note.description,
-                  style: TextStyle(
-                    decoration: note.completed
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      note.description,
+                      style: TextStyle(
+                        decoration: note.completed
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                      ),
+                    ),
+                    if (note.notification != null && !note.completed)
+                      Text(
+                        '${AppLocalizations.of(context)!.reminder}: ${DateFormat.MMMd(deviceLocal).add_Hm().format(note.notification!)}',
+                        style: const TextStyle(fontSize: 11),
+                      )
+                  ],
                 ),
               ),
               Row(

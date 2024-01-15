@@ -17,7 +17,7 @@ class NoteModel {
   bool completed;
 
   @HiveField(3)
-  final DateTime? notification;
+  DateTime? notification;
 
   NoteModel({
     this.id,

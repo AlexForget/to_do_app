@@ -13,5 +13,6 @@
     "delete": "Supprimer",
     "noteNoteRegister": "Aucunte note n'a encore été enregistré",
     "addReminder": "Ajouter une rappel",
-    "notificationWillBeSent": "Une notification sera envoyé le"
+    "notificationWillBeSent": "Une notification sera envoyé le",
+    "reminder": "Rappel"
 }

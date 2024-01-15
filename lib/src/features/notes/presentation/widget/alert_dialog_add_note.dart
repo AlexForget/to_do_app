@@ -84,14 +84,6 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
                       '${AppLocalizations.of(context)!.notificationWillBeSent} $formattedDate')
                   : null,
             ),
-            DropdownMenu<String>(
-              label: Text('Frequency'.hardcoded),
-              initialSelection: notificationType.first,
-              dropdownMenuEntries: notificationType
-                  .map<DropdownMenuEntry<String>>((String value) {
-                return DropdownMenuEntry(value: value, label: value);
-              }).toList(),
-            )
           ],
         ),
       ),
