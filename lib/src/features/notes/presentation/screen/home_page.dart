@@ -28,11 +28,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: isFabVisible
-          ? FloatingActionButton.extended(
+          ? FloatingActionButton.small(
               foregroundColor: Theme.of(context).colorScheme.surface,
               backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              label: Text(AppLocalizations.of(context)!.add),
-              icon: const Icon(Icons.add),
+              child: const Icon(Icons.add),
               onPressed: () {
                 showDialog(
                   context: context,
