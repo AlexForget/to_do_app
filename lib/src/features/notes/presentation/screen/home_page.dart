@@ -26,22 +26,26 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: isFabVisible
-          ? FloatingActionButton.small(
-              foregroundColor: Theme.of(context).colorScheme.surface,
-              backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              child: const Icon(Icons.add),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialogAddNote();
-                  },
-                );
-              },
-            )
-          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        foregroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        child: const Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialogAddNote();
+            },
+          );
+        },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).colorScheme.primary,
+        height: 35,
+        shape: const CircularNotchedRectangle(),
+      ),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -68,23 +72,30 @@ class _HomePageState extends State<HomePage> {
                 }
                 return true;
               },
-              child: Padding(
-                padding: const EdgeInsets.only(top: Sizes.p4),
-                child: ReorderableListView.builder(
-                  onReorder: (oldIndex, newIndex) {
-                    context.read<NoteListBloc>().add(
-                        ReorderedList(oldIndex: oldIndex, newIndex: newIndex));
-                  },
-                  itemCount: notes.length,
-                  itemBuilder: (context, index) {
-                    final note = notes[index];
-                    return BuildNoteTile(
-                      context: context,
-                      note: note,
-                      key: ObjectKey(note), //Key(notes[index].id.toString()),
-                    );
-                  },
-                ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: Sizes.p4),
+                      child: ReorderableListView.builder(
+                        onReorder: (oldIndex, newIndex) {
+                          context.read<NoteListBloc>().add(ReorderedList(
+                              oldIndex: oldIndex, newIndex: newIndex));
+                        },
+                        itemCount: notes.length,
+                        itemBuilder: (context, index) {
+                          final note = notes[index];
+                          return BuildNoteTile(
+                            context: context,
+                            note: note,
+                            key: ObjectKey(
+                                note), //Key(notes[index].id.toString()),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           } else {
