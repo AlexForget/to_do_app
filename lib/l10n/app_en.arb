@@ -20,5 +20,6 @@
   "noteNoteRegister": "No notes have been recorded yet",
   "addReminder": "Add a reminder",
   "notificationWillBeSent": "A notification will be sent on",
-  "reminder": "Reminder"
+  "reminder": "Reminder",
+  "updateReminder": "Modify reminder"
 }

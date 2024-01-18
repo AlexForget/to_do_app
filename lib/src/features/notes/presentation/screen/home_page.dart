@@ -72,30 +72,20 @@ class _HomePageState extends State<HomePage> {
                 }
                 return true;
               },
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: Sizes.p4),
-                      child: ReorderableListView.builder(
-                        onReorder: (oldIndex, newIndex) {
-                          context.read<NoteListBloc>().add(ReorderedList(
-                              oldIndex: oldIndex, newIndex: newIndex));
-                        },
-                        itemCount: notes.length,
-                        itemBuilder: (context, index) {
-                          final note = notes[index];
-                          return BuildNoteTile(
-                            context: context,
-                            note: note,
-                            key: ObjectKey(
-                                note), //Key(notes[index].id.toString()),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+              child: ReorderableListView.builder(
+                onReorder: (oldIndex, newIndex) {
+                  context.read<NoteListBloc>().add(
+                      ReorderedList(oldIndex: oldIndex, newIndex: newIndex));
+                },
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  final note = notes[index];
+                  return BuildNoteTile(
+                    context: context,
+                    note: note,
+                    key: ObjectKey(note), //Key(notes[index].id.toString()),
+                  );
+                },
               ),
             );
           } else {

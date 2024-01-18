@@ -12,7 +12,8 @@
     "record": "Enregistrer",
     "delete": "Supprimer",
     "noteNoteRegister": "Aucunte note n'a encore été enregistré",
-    "addReminder": "Ajouter une rappel",
+    "addReminder": "Ajouter un rappel",
     "notificationWillBeSent": "Une notification sera envoyé le",
-    "reminder": "Rappel"
+    "reminder": "Rappel",
+    "updateReminder": "Modifier le rappel"
 }

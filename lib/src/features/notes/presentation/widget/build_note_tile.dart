@@ -27,7 +27,7 @@ class BuildNoteTile extends StatelessWidget {
     final String deviceLocal = Platform.localeName;
     return Padding(
       padding: const EdgeInsets.only(
-          left: Sizes.p12, right: Sizes.p12, top: Sizes.p4, bottom: Sizes.p4),
+          left: Sizes.p12, right: Sizes.p12, top: Sizes.p8),
       child: Container(
         padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
