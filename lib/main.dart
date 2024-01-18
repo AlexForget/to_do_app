@@ -23,9 +23,6 @@ void main() async {
   Hive.registerAdapter(NoteModelAdapter());
   // ignore: unused_local_variable
   boxNotes = await Hive.openBox<NoteModel>(noteHiveBox);
-  // boxNotes.deleteAt(0);
-  // await boxNotes.clear();
-  // print(boxNotes.values);
   Bloc.observer = const SimpleBlocObserver();
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('app_icon');

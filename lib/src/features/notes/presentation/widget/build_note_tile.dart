@@ -34,7 +34,11 @@ class BuildNoteTile extends StatelessWidget {
             borderRadius: const BorderRadius.all(radius8),
             color: Theme.of(context).colorScheme.primaryContainer),
         child: Padding(
-          padding: const EdgeInsets.only(left: Sizes.p8, right: Sizes.p8),
+          padding: const EdgeInsets.only(
+              left: Sizes.p16,
+              right: Sizes.p8,
+              top: Sizes.p4,
+              bottom: Sizes.p4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
