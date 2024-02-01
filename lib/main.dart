@@ -6,11 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
+import 'package:to_do_app/src/features/notes/data/task_repository.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
-import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
 import 'package:to_do_app/src/helpers/bloc_obesrver.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:to_do_app/src/features/notes/presentation/screen/home_page.dart';
+import 'package:to_do_app/src/features/notes/data/local_db.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -32,11 +33,11 @@ void main() async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-  runApp(const MyApp());
+  runApp(const TodoApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class TodoApp extends StatelessWidget {
+  const TodoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +45,14 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return BlocProvider(
-      create: (context) => NoteListBloc(),
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (contect) => NoteListBloc()..add(InitialNote()))
-        ],
+    return RepositoryProvider(
+      create: (context) => TaskRepository(),
+      child: BlocProvider(
+        create: (context) => NoteListBloc(
+          taskRepository: RepositoryProvider.of<TaskRepository>(context),
+        )..add(
+            InitialNote(),
+          ),
         child: MaterialApp(
           onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
           debugShowCheckedModeBanner: false,

@@ -5,18 +5,21 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:hive/hive.dart';
 import 'package:timezone/standalone.dart';
 import 'package:to_do_app/main.dart';
+import 'package:to_do_app/src/features/notes/data/task_repository.dart';
 import 'package:to_do_app/src/features/notes/models/note_model.dart';
-import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:to_do_app/src/helpers/time_comparaison.dart';
+import 'package:to_do_app/src/features/notes/data/local_db.dart';
 
 part 'note_list_event.dart';
 part 'note_list_state.dart';
 
 class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
-  NoteListBloc() : super(NoteListInitial(notes: const [])) {
+  final TaskRepository taskRepository;
+  NoteListBloc({required this.taskRepository})
+      : super(NoteListInitial(notes: const [])) {
     on<InitialNote>(_initialNote);
     on<ReorderedList>(_reorderedNote);
     on<AddNote>(_addNote);
@@ -27,6 +30,8 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   void _initialNote(InitialNote event, Emitter<NoteListState> emit) {
     final box = Hive.box<NoteModel>(noteHiveBox);
     List<NoteModel> notes = box.values.toList();
+
+    // List<NoteModel> notes = taskRepository.getTaskList();
 
     emit(NoteListInitial(notes: notes));
   }

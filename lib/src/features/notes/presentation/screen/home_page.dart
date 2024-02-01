@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
 import 'package:to_do_app/src/features/notes/presentation/widget/build_note_tile.dart';
-import 'package:to_do_app/src/features/notes/presentation/widget/alert_dialog_add_note.dart';
+import 'package:to_do_app/src/features/notes/presentation/widget/add_task_alert.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
