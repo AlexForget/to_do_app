@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
-import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/tasks/bloc/task_list_bloc.dart';
+import 'package:to_do_app/src/features/tasks/models/task_model.dart';
 
 class DeleteNoteAlertDialog extends StatelessWidget {
   const DeleteNoteAlertDialog({
@@ -10,7 +10,7 @@ class DeleteNoteAlertDialog extends StatelessWidget {
     required this.note,
   });
 
-  final NoteModel note;
+  final TaskModel note;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class DeleteNoteAlertDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            context.read<NoteListBloc>().add(
-                  DeleteNote(note: note),
+            context.read<TaskListBloc>().add(
+                  DeleteTask(task: note),
                 );
             Navigator.pop(context);
           },

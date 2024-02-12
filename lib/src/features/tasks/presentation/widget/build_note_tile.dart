@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
-import 'package:to_do_app/src/features/notes/models/note_model.dart';
-import 'package:to_do_app/src/features/notes/presentation/widget/delete_note_alert_dialog.dart';
-import 'package:to_do_app/src/features/notes/presentation/widget/edit_note_alert_dialog.dart';
+import 'package:to_do_app/src/features/tasks/bloc/task_list_bloc.dart';
+import 'package:to_do_app/src/features/tasks/models/task_model.dart';
+import 'package:to_do_app/src/features/tasks/presentation/widget/delete_note_alert.dart';
+import 'package:to_do_app/src/features/tasks/presentation/widget/edit_note_alert.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
 
 class BuildNoteTile extends StatelessWidget {
@@ -20,7 +20,7 @@ class BuildNoteTile extends StatelessWidget {
   }) : super(key: key);
 
   final BuildContext context;
-  final NoteModel note;
+  final TaskModel note;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class BuildNoteTile extends StatelessWidget {
                 value: note.completed,
                 onChanged: (value) {
                   note.completed = value!;
-                  context.read<NoteListBloc>().add(UpdateNote(note: note));
+                  context.read<TaskListBloc>().add(UpdateTask(task: note));
                 },
               ),
               Expanded(

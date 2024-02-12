@@ -5,12 +5,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
-import 'package:to_do_app/src/features/notes/models/note_model.dart';
-import 'package:to_do_app/src/features/notes/models/note_model_box.dart';
+import 'package:to_do_app/src/features/tasks/bloc/task_list_bloc.dart';
+import 'package:to_do_app/src/features/tasks/data/local_db.dart';
+import 'package:to_do_app/src/features/tasks/models/task_model.dart';
 import 'package:to_do_app/src/helpers/bloc_obesrver.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
-import 'package:to_do_app/src/features/notes/presentation/screen/home_page.dart';
+import 'package:to_do_app/src/features/tasks/presentation/screen/home_page.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -20,9 +20,9 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   // ignore: await_only_futures
   await Hive.initFlutter();
-  Hive.registerAdapter(NoteModelAdapter());
+  Hive.registerAdapter(TaskModelAdapter());
   // ignore: unused_local_variable
-  boxNotes = await Hive.openBox<NoteModel>(noteHiveBox);
+  boxNotes = await Hive.openBox<TaskModel>(noteHiveBox);
   Bloc.observer = const SimpleBlocObserver();
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('app_icon');
@@ -45,10 +45,10 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return BlocProvider(
-      create: (context) => NoteListBloc(),
+      create: (context) => TaskListBloc(),
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (contect) => NoteListBloc()..add(InitialNote()))
+          BlocProvider(create: (contect) => TaskListBloc()..add(InitialTask()))
         ],
         child: MaterialApp(
           onGenerateTitle: (context) => AppLocalizations.of(context)!.title,

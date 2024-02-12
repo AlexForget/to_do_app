@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
-import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
-import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/tasks/bloc/task_list_bloc.dart';
+import 'package:to_do_app/src/features/tasks/models/task_model.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
 
 class EditNoteAlertDialog extends StatefulWidget {
   final TextEditingController descriptionController;
-  final NoteModel note;
+  final TaskModel note;
   const EditNoteAlertDialog({
     super.key,
     required this.descriptionController,
@@ -115,7 +115,7 @@ class _EditNoteAlertDialogState extends State<EditNoteAlertDialog> {
               if (notificationDateTime != null) {
                 widget.note.notification = notificationDateTime;
               }
-              context.read<NoteListBloc>().add(UpdateNote(note: widget.note));
+              context.read<TaskListBloc>().add(UpdateTask(task: widget.note));
               Navigator.pop(context);
               widget.descriptionController.text = '';
             }

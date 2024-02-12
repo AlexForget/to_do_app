@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:hive/hive.dart';
 
-part 'note_model.g.dart';
+part 'task_model.g.dart';
 
 @HiveType(typeId: 0)
-class NoteModel {
+class TaskModel {
   @HiveField(0)
   int? id;
 
@@ -19,20 +19,20 @@ class NoteModel {
   @HiveField(3)
   DateTime? notification;
 
-  NoteModel({
+  TaskModel({
     this.id,
     required this.description,
     required this.completed,
     this.notification,
   });
 
-  NoteModel copyWith({
+  TaskModel copyWith({
     int? id,
     String? description,
     bool? completed,
     DateTime? notification,
   }) {
-    return NoteModel(
+    return TaskModel(
       id: id ?? this.id,
       description: description ?? this.description,
       completed: completed ?? this.completed,
@@ -49,8 +49,8 @@ class NoteModel {
     };
   }
 
-  factory NoteModel.fromMap(Map<String, dynamic> map) {
-    return NoteModel(
+  factory TaskModel.fromMap(Map<String, dynamic> map) {
+    return TaskModel(
       id: map['id'] as int,
       description: map['description'] as String,
       completed: map['completed'] as bool,
@@ -62,16 +62,16 @@ class NoteModel {
 
   String toJson() => json.encode(toMap());
 
-  factory NoteModel.fromJson(String source) =>
-      NoteModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory TaskModel.fromJson(String source) =>
+      TaskModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'NoteModel(id: $id, description: $description, completed: $completed, notification: $notification)';
+    return 'TaskModel(id: $id, description: $description, completed: $completed, notification: $notification)';
   }
 
   @override
-  bool operator ==(covariant NoteModel other) {
+  bool operator ==(covariant TaskModel other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&

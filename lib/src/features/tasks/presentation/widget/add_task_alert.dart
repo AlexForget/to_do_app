@@ -4,20 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
-import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
-import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/tasks/bloc/task_list_bloc.dart';
+import 'package:to_do_app/src/features/tasks/models/task_model.dart';
 import 'package:to_do_app/src/helpers/app_sizes.dart';
 
-class AlertDialogAddNote extends StatefulWidget {
-  AlertDialogAddNote({super.key});
+class AlertDialogAddTask extends StatefulWidget {
+  AlertDialogAddTask({super.key});
 
   final TextEditingController descriptionController = TextEditingController();
 
   @override
-  State<AlertDialogAddNote> createState() => _AlertDialogAddNoteState();
+  State<AlertDialogAddTask> createState() => _AlertDialogAddTaskState();
 }
 
-class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
+class _AlertDialogAddTaskState extends State<AlertDialogAddTask> {
   DateTime? notificationDateTime;
   String formattedDate = '';
   @override
@@ -90,12 +90,12 @@ class _AlertDialogAddNoteState extends State<AlertDialogAddNote> {
         TextButton(
           onPressed: () {
             if (widget.descriptionController.text.isNotEmpty) {
-              final note = NoteModel(
+              final task = TaskModel(
                 description: widget.descriptionController.text.trim(),
                 completed: false,
                 notification: notificationDateTime,
               );
-              context.read<NoteListBloc>().add(AddNote(note: note));
+              context.read<TaskListBloc>().add(AddTask(task: task));
               Navigator.pop(context);
               widget.descriptionController.text = '';
             }
