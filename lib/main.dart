@@ -5,13 +5,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
-import 'package:to_do_app/src/features/notes/data/task_repository.dart';
-import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/tasks/bloc/task_list_bloc.dart';
+import 'package:to_do_app/src/features/tasks/data/local_db.dart';
+import 'package:to_do_app/src/features/tasks/models/task_model.dart';
 import 'package:to_do_app/src/helpers/bloc_obesrver.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
-import 'package:to_do_app/src/features/notes/presentation/screen/home_page.dart';
-import 'package:to_do_app/src/features/notes/data/local_db.dart';
+import 'package:to_do_app/src/features/tasks/presentation/screen/home_page.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -21,9 +20,9 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   // ignore: await_only_futures
   await Hive.initFlutter();
-  Hive.registerAdapter(NoteModelAdapter());
+  Hive.registerAdapter(TaskModelAdapter());
   // ignore: unused_local_variable
-  boxNotes = await Hive.openBox<NoteModel>(noteHiveBox);
+  boxNotes = await Hive.openBox<TaskModel>(noteHiveBox);
   Bloc.observer = const SimpleBlocObserver();
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('app_icon');
@@ -33,11 +32,11 @@ void main() async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-  runApp(const TodoApp());
+  runApp(const MyApp());
 }
 
-class TodoApp extends StatelessWidget {
-  const TodoApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +44,12 @@ class TodoApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return RepositoryProvider(
-      create: (context) => TaskRepository(),
-      child: BlocProvider(
-        create: (context) => NoteListBloc(
-          taskRepository: RepositoryProvider.of<TaskRepository>(context),
-        )..add(
-            InitialNote(),
-          ),
+    return BlocProvider(
+      create: (context) => TaskListBloc(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (contect) => TaskListBloc()..add(InitialTask()))
+        ],
         child: MaterialApp(
           onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
           debugShowCheckedModeBanner: false,

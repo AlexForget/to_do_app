@@ -1,31 +1,33 @@
-import 'package:to_do_app/src/features/notes/data/local_db.dart';
-import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/tasks/data/local_db.dart';
+import 'package:to_do_app/src/features/tasks/models/task_model.dart';
 
 class TaskRepository {
   LocalDB localDB = LocalDB();
 
-  List<NoteModel> fetchTask() {
+  List<TaskModel> fetchTask() {
     final taskList = localDB.readTaskList();
     return taskList;
   }
 
-  void addNewTask(NoteModel task) {
+  void addNewTask(TaskModel task) {
     task.id = getNextIdAfterHighest();
     localDB.createNewTask(task);
   }
 
-  void deleteTask(NoteModel task) {
+  void deleteTask(TaskModel task) {
     localDB.deleteTask(task);
   }
 
-  void updateTask(NoteModel task) {
+  void updateTask(TaskModel task) {
     localDB.updateTask(task);
   }
 
-  void reorderTasks(List<NoteModel> tasks) {
-    localDB.deleteAllTask();
+  void reorderTasks(List<TaskModel> tasks) {
     for (var i = 0; i < tasks.length; i++) {
-      boxNotes.put(i, tasks[i]);
+      localDB.deleteTask(tasks[i]);
+    }
+    for (var i = 0; i < tasks.length; i++) {
+      localDB.createNewTask(tasks[i]);
     }
   }
 

@@ -4,9 +4,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:to_do_app/src/features/notes/bloc/note_list_bloc.dart';
-import 'package:to_do_app/src/features/notes/presentation/widget/build_note_tile.dart';
-import 'package:to_do_app/src/features/notes/presentation/widget/add_task_alert.dart';
+import 'package:to_do_app/src/features/tasks/bloc/task_list_bloc.dart';
+import 'package:to_do_app/src/features/tasks/presentation/widget/build_note_tile.dart';
+import 'package:to_do_app/src/features/tasks/presentation/widget/add_task_alert.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
           showDialog(
             context: context,
             builder: (context) {
-              return AlertDialogAddNote();
+              return AlertDialogAddTask();
             },
           );
         },
@@ -57,11 +57,11 @@ class _HomePageState extends State<HomePage> {
         elevation: 4.0,
         shadowColor: Theme.of(context).colorScheme.onBackground,
       ),
-      body: BlocBuilder<NoteListBloc, NoteListState>(
+      body: BlocBuilder<TaskListBloc, TaskListState>(
         builder: (context, state) {
-          if ((state is NoteListUpdated || state is NoteListInitial) &&
-              state.notes.isNotEmpty) {
-            final notes = state.notes;
+          if ((state is TaskListUpdated || state is TaskListInitial) &&
+              state.tasks.isNotEmpty) {
+            final notes = state.tasks;
             return NotificationListener<UserScrollNotification>(
               onNotification: (notification) {
                 if (notification.direction == ScrollDirection.forward) {
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: ReorderableListView.builder(
                 onReorder: (oldIndex, newIndex) {
-                  context.read<NoteListBloc>().add(
+                  context.read<TaskListBloc>().add(
                       ReorderedList(oldIndex: oldIndex, newIndex: newIndex));
                 },
                 itemCount: notes.length,

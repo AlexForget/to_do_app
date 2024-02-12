@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:to_do_app/src/features/notes/models/note_model.dart';
+import 'package:to_do_app/src/features/tasks/models/task_model.dart';
 import 'package:to_do_app/src/helpers/constants.dart';
 import 'package:timezone/standalone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -14,7 +14,7 @@ class NotificationServices {
 
   NotificationServices();
 
-  Future<void> sendNotification(NoteModel task) async {
+  Future<void> sendNotification(TaskModel task) async {
     final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
 
     tz.initializeTimeZones();
@@ -56,7 +56,7 @@ class NotificationServices {
     }
   }
 
-  Future<void> updateNotification(NoteModel task) async {
+  Future<void> updateNotification(TaskModel task) async {
     if (task.notification != null && task.completed) {
       cancelNotification(task.id!);
     } else if (task.notification != null &&
